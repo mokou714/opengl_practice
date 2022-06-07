@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="engine">
+      <UniqueIdentifier>{e9520658-d3b7-4b55-9fed-e31deae03f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer">
+      <UniqueIdentifier>{1d7215e5-493b-436a-ae98-0bdfe6839395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="material">
+      <UniqueIdentifier>{1dae8771-d71e-4140-b9b5-8e07c66901f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{a41f96cb-060b-4286-9a61-c1ed544db89f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene">
+      <UniqueIdentifier>{9b76f1b8-2197-45ce-91a8-13d53b6af25d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gl">
+      <UniqueIdentifier>{165afc36-4cbd-48f6-9a6c-353d22568df9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mesh">
+      <UniqueIdentifier>{34e877fe-b560-4e3e-bd55-91704b38777d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gameobjects">
+      <UniqueIdentifier>{97c4ea45-6923-4418-996a-163395974463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="camera">
+      <UniqueIdentifier>{ba4df9df-a4a7-423b-bcee-d5c0d76cf91c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{6c263441-edb0-4f9e-b86c-84d84be361dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{ac9cce29-1cb7-48f1-b44a-f9ba143e11d7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="engine.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="sceneManager.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="gl.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="baseRenderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="glContext.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="plane.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="material.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="gameObject.cpp">
+      <Filter>gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="cameraManager.cpp">
+      <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="planeObj.cpp">
+      <Filter>gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="firstScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="sphere.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="sphereObj.cpp">
+      <Filter>gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="rendererManager.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="engine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneManager.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="gl.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="baseRenderer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="glContext.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="plane.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="material.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gameObject.h">
+      <Filter>gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraManager.h">
+      <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="planeObj.h">
+      <Filter>gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="firstScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="sphere.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="sphereObj.h">
+      <Filter>gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="rendererManager.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="笔记.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="materials\BaseColor.ps">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\BaseColor.vs">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

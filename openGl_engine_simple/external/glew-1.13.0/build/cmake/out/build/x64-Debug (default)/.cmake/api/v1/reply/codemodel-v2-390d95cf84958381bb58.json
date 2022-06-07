@@ -1,0 +1,105 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.4"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "glew",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "glew::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-glew-Debug-83a051ac601bdadb4f43.json",
+					"name" : "glew",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "glew_s::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-glew_s-Debug-ec4aa554eb0c32f56c6f.json",
+					"name" : "glew_s",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "glewinfo::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-glewinfo-Debug-2873faec8cb2286ffae7.json",
+					"name" : "glewinfo",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "glewmx::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-glewmx-Debug-1c3ac8ed73199e862b4a.json",
+					"name" : "glewmx",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "glewmx_s::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-glewmx_s-Debug-9f38381a29a2be8b5614.json",
+					"name" : "glewmx_s",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "visualinfo::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-visualinfo-Debug-2de70d8924ce26dbdd56.json",
+					"name" : "visualinfo",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "F:/GL Projects/openGl_engine_simple/openGl_engine_simple/external/glew-1.13.0/build/cmake/out/build/x64-Debug (default)",
+		"source" : "F:/GL Projects/openGl_engine_simple/openGl_engine_simple/external/glew-1.13.0/build/cmake"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}
