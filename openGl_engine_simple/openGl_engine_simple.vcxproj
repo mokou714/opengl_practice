@@ -149,6 +149,8 @@
     <ClInclude Include="baseRenderer.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraManager.h" />
+    <ClInclude Include="cube.h" />
+    <ClInclude Include="cubeObj.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="firstScene.h" />
     <ClInclude Include="gameObject.h" />
@@ -170,6 +172,8 @@
     <ClCompile Include="baseRenderer.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraManager.cpp" />
+    <ClCompile Include="cube.cpp" />
+    <ClCompile Include="cubeObj.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="firstScene.cpp" />
     <ClCompile Include="gameObject.cpp" />

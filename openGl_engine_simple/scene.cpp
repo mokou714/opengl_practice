@@ -4,7 +4,8 @@ using namespace simple_engine;
 
 Scene::Scene(const std::string name, Camera* camera) :
 	m_name(name),
-	mainCamera(camera)
+	mainCamera(camera),
+	inited(false)
 {
 	m_gameObjects.push_back(camera);
 }
@@ -42,4 +43,26 @@ std::string Scene::getName() { return m_name; }
 
 const std::vector<GameObject*>& Scene::getGameObjects() {
 	return m_gameObjects;
+}
+
+void Scene::logic() {
+	if (!inited) {
+		CONSOLE_PRINTF("ERROR! update scene before initializing.")
+		return;
+	}
+
+	for (auto& obj : getGameObjects()) {
+		obj->Update();
+	}
+}
+
+void Scene::render() {
+	if (!inited) {
+		CONSOLE_PRINTF("ERROR! render scene before initializing.")
+		return;
+	}
+
+	for (auto& obj : getGameObjects()) {
+		obj->Draw();
+	}
 }

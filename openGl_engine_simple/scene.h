@@ -21,7 +21,14 @@ namespace simple_engine {
 		void setMainCamera(Camera* camera) { mainCamera = camera; }
 		std::string getName();
 
+		virtual bool init() { inited = true; return true; }
+		
+		//äÖÈ¾Ö¡ Âß¼­Ö¡
+		virtual void render();
+		virtual void logic();
+
 	private:
+		bool inited;
 		Camera* mainCamera;
 		std::string m_name;
 		std::vector<GameObject*> m_gameObjects;

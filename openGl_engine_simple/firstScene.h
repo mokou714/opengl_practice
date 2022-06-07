@@ -6,7 +6,7 @@ namespace simple_engine {
 	{
 	public:
 		FirstScene(std::string name, Camera* camera);
-
+		bool init() override;
 	};
 }
 

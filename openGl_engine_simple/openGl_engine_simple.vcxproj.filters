@@ -94,6 +94,12 @@
     <ClCompile Include="rendererManager.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="cube.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="cubeObj.cpp">
+      <Filter>gameobjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
@@ -152,6 +158,12 @@
     </ClInclude>
     <ClInclude Include="rendererManager.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="cube.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="cubeObj.h">
+      <Filter>gameobjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

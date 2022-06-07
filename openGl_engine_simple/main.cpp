@@ -16,6 +16,7 @@ int main() {
 
 	if(mainScene){
 		SceneManager::Instance()->setCurrentScene(mainScene);
+		mainScene->init();
 	}
 	else {
 		delete mainCam;

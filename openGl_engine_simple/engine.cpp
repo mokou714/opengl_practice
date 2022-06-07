@@ -61,19 +61,13 @@ void Engine::stop() {
 void Engine::doLogic() {
 	//³¡¾°Âß¼­Ö¡
 	auto currentScene = SceneManager::Instance()->getCurrentScene();
-	for (auto& obj : currentScene->getGameObjects()) {
-		obj->Update();
-	}
-
+	currentScene->logic();
 }
 
 void Engine::doRender() {
-
 	//³¡¾°äÖÈ¾Ö¡
 	auto currentScene = SceneManager::Instance()->getCurrentScene();
-	for (auto& obj : currentScene->getGameObjects()) {
-		obj->Draw();
-	}
+	currentScene->render();
 }
 
 void Engine::beginFrame() {
