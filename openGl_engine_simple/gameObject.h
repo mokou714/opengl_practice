@@ -28,6 +28,7 @@ namespace simple_engine {
 		glm::vec4 getForward();	//local -z 方向
 		glm::vec4 getRight(); //local x 方向
 		glm::vec4 getUp(); //local y 方向
+		Material& getMaterial() { return m_material; }
 
 		void setPositionX(float x) { m_position.x = x; }
 		void setPositionY(float y) { m_position.y = y; }
