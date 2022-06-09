@@ -119,13 +119,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;TW_STATIC;TW_NO_LIB_PRAGMA;TW_NO_DIRECT3D;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\Assimp\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glad\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glm;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\GLFW\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\nuklear\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\pugixml\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\stb;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glew-1.13.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\SOIL\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\Assimp\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glad\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glm;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\GLFW\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\nuklear\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\pugixml\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\stb;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glew-1.13.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;external\GLFW\lib-vc2015\glfw3.lib;external\glew-1.13.0\bin\GLEW_1130.lib;external\Assimp\assimp-vc140-mt.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;external\GLFW\lib-vc2015\glfw3.lib;external\glew-1.13.0\bin\GLEW_1130.lib;external\Assimp\assimp-vc140-mt.lib;winmm.lib;external\SOIL\SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -146,11 +146,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="baseLight.h" />
     <ClInclude Include="baseRenderer.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="cubeObj.h" />
+    <ClInclude Include="directLight.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="firstScene.h" />
     <ClInclude Include="gameObject.h" />
@@ -164,16 +166,21 @@
     <ClInclude Include="rendererManager.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="skybox.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="sphereObj.h" />
+    <ClInclude Include="suzanne.h" />
+    <ClInclude Include="suzanneObj.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="baseLight.cpp" />
     <ClCompile Include="baseRenderer.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="cubeObj.cpp" />
+    <ClCompile Include="directLight.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="firstScene.cpp" />
     <ClCompile Include="gameObject.cpp" />
@@ -188,8 +195,11 @@
     <ClCompile Include="rendererManager.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="skybox.cpp" />
     <ClCompile Include="sphere.cpp" />
     <ClCompile Include="sphereObj.cpp" />
+    <ClCompile Include="suzanne.cpp" />
+    <ClCompile Include="suzanneObj.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +208,10 @@
   <ItemGroup>
     <None Include="materials\BaseColor.ps" />
     <None Include="materials\BaseColor.vs" />
+    <None Include="materials\PhongShading.ps" />
+    <None Include="materials\PhongShading.vs" />
+    <None Include="materials\Skybox.ps" />
+    <None Include="materials\Skybox.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

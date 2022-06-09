@@ -1,0 +1,13 @@
+#version 330 core
+
+uniform vec3 base_color;
+uniform sampler2D baseMap;
+
+in vec2 v_coords;
+in vec4 v_normals;
+
+out vec4 color;
+
+void main() {
+    color = texture2D(baseMap, v_coords);
+}

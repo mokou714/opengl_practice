@@ -5,7 +5,8 @@ using namespace simple_engine;
 Scene::Scene(const std::string name, Camera* camera) :
 	m_name(name),
 	mainCamera(camera),
-	inited(false)
+	inited(false),
+	m_skybox(nullptr)
 {
 	m_gameObjects.push_back(camera);
 }
@@ -16,6 +17,10 @@ Scene::~Scene() {
 	}
 	m_gameObjects.clear();
 	mainCamera = nullptr;
+	if (m_skybox) {
+		delete m_skybox;
+	}
+	m_skybox = nullptr;
 }
 
 void Scene::addGameObjects(GameObject* gameObject) {
@@ -54,6 +59,10 @@ void Scene::logic() {
 	for (auto& obj : getGameObjects()) {
 		obj->Update();
 	}
+
+	if (m_skybox) {
+		m_skybox->Update();
+	}
 }
 
 void Scene::render() {
@@ -64,5 +73,9 @@ void Scene::render() {
 
 	for (auto& obj : getGameObjects()) {
 		obj->Draw();
+	}
+
+	if (m_skybox) {
+		m_skybox->Draw();
 	}
 }

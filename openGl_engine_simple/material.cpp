@@ -5,8 +5,14 @@ using namespace simple_engine;
 Material::Material(): 
 	m_vertex_shader(""),
 	m_pixel_shader(""),
-	m_shaderProgram(0)
+	m_glShaderProgram(0)
 {
 
+}
+
+void Material::setCubemapTextureFiles(const char* uniform_name, const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back) {
+	m_cubemapTextures[uniform_name] = std::vector<const char*>{
+		right, left, top, bottom, front, back
+	};
 }
 

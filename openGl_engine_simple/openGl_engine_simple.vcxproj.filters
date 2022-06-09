@@ -10,9 +10,6 @@
     <Filter Include="material">
       <UniqueIdentifier>{1dae8771-d71e-4140-b9b5-8e07c66901f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="assets">
-      <UniqueIdentifier>{a41f96cb-060b-4286-9a61-c1ed544db89f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="scene">
       <UniqueIdentifier>{9b76f1b8-2197-45ce-91a8-13d53b6af25d}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="shaders">
       <UniqueIdentifier>{ac9cce29-1cb7-48f1-b44a-f9ba143e11d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="light">
+      <UniqueIdentifier>{547cd1ed-4e6f-434e-8b2a-dc09a890cd23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +100,21 @@
     <ClCompile Include="cubeObj.cpp">
       <Filter>gameobjects</Filter>
     </ClCompile>
+    <ClCompile Include="suzanne.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="suzanneObj.cpp">
+      <Filter>gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="baseLight.cpp">
+      <Filter>light</Filter>
+    </ClCompile>
+    <ClCompile Include="directLight.cpp">
+      <Filter>light</Filter>
+    </ClCompile>
+    <ClCompile Include="skybox.cpp">
+      <Filter>gameobjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
@@ -165,6 +180,21 @@
     <ClInclude Include="cubeObj.h">
       <Filter>gameobjects</Filter>
     </ClInclude>
+    <ClInclude Include="suzanne.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="suzanneObj.h">
+      <Filter>gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="baseLight.h">
+      <Filter>light</Filter>
+    </ClInclude>
+    <ClInclude Include="directLight.h">
+      <Filter>light</Filter>
+    </ClInclude>
+    <ClInclude Include="skybox.h">
+      <Filter>gameobjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="笔记.txt" />
@@ -174,6 +204,18 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="materials\BaseColor.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\PhongShading.ps">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\PhongShading.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\Skybox.ps">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\Skybox.vs">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

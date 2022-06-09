@@ -2,6 +2,8 @@
 #include "planeObj.h"
 #include "sphereObj.h"
 #include "cubeObj.h"
+#include "suzanneObj.h"
+#include "skybox.h"
 
 using namespace simple_engine;
 
@@ -30,6 +32,22 @@ bool FirstScene::init() {
 	cube->setPosition(glm::vec3(-20.0f, 30.0f, 0.0f));
 	cube->getMaterial().setUniform3f("base_color", glm::vec3(0.8, 0.8, 0.0));
 	addGameObjects(cube);
+
+	GameObject* suzanne = new SuzanneObj("suzanne");
+	suzanne->setScale(20.0f);
+	suzanne->setPositionZ(50.0f);
+	suzanne->setPositionY(30.0f);
+	addGameObjects(suzanne);
+
+	m_skybox = new Skybox("skybox");
+	m_skybox->getMaterial().setCubemapTextureFiles("skyCubemap",
+		"textures/cubemap/miramar_lf.tga",
+		"textures/cubemap/miramar_rt.tga",
+		"textures/cubemap/miramar_up.tga",
+		"textures/cubemap/miramar_dn.tga",
+		"textures/cubemap/miramar_bk.tga",
+		"textures/cubemap/miramar_ft.tga"
+	);
 
 	return true;
 }

@@ -1,0 +1,12 @@
+#version 330 core
+
+uniform samplerCube skyCubemap;
+
+in vec2 v_coords;
+in vec3 v_pos;
+
+out vec4 color;
+
+void main() {
+    color = texture(skyCubemap, v_pos);
+}

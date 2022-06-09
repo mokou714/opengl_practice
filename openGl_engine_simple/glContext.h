@@ -26,8 +26,10 @@ namespace simple_engine {
 		/*直接改变管线状态的操作*/
 		void resetPipelineState();
 		void present();
-		void drawCommand(const std::vector<glm::vec3>& vertices, const std::vector<unsigned short>& indices);
+		void drawCommand(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec2>& coords,
+			const std::vector<glm::vec3>& normals, const std::vector<unsigned short>& indices);
 		void setMaterial(Material& mat);
+		void setFaceCulling(bool enbaled, bool is_back);
 
 		/*创建/销毁资源的操作*/
 		GLuint createTexture();
@@ -60,7 +62,9 @@ namespace simple_engine {
 		GLuint m_elementBuffer;
 		//program_id -> <uniform name, uniform location>
 		std::unordered_map<GLuint, std::unordered_map<std::string, GLuint>> m_programs_info_map;
+		//texture_id -> uniform name
 		std::vector<GLuint> m_textures;
+		std::vector<GLuint> m_cubemapTextures;
 
 	};
 

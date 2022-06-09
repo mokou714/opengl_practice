@@ -131,23 +131,123 @@ void GLContext::setMaterial(Material& mat)
 		glUniformMatrix4fv(program_info_map[name], 1, GL_FALSE, &pair.second[0][0]);
 	}
 
+	//创建并绑定纹理
+	if (mat.getTextureResources().size() > 0 || mat.getCubemapTextureResources().size() > 0) {
+		//材质有纹理但未创建gl纹理 (不考虑部分已创建的情况)
+		if (mat.getGLTextures().size() == 0) {
+			for(auto& pair: mat.getTextureResources()){
+				auto uniform_name = pair.first;
+				auto texture_file = pair.second;
+				GLuint tex_id = Utils::createGLTexture(texture_file);
+				if (tex_id) {
+					m_textures.push_back(tex_id);
+					program_info_map[uniform_name] = glGetUniformLocation(program_id, uniform_name.c_str());
+					mat.addGLTexture(uniform_name, tex_id);
+				}
+				else {
+					CONSOLE_PRINTF("GLContext failed to create texture: %s\n", texture_file);
+				}
+			}
+
+			for (auto& pair : mat.getCubemapTextureResources()) {
+				auto uniform_name = pair.first;
+				GLuint cubemap_id = Utils::createCubemap(pair.second);
+				if (cubemap_id)
+				{
+					m_cubemapTextures.push_back(cubemap_id);
+					program_info_map[uniform_name] = glGetUniformLocation(program_id, uniform_name.c_str());
+					mat.addGLTexture(uniform_name, cubemap_id);
+				}
+				else {
+					CONSOLE_PRINTF("GLContext failed to create cubemap: %s\n", pair.second[0]);
+				}
+				
+			}
+		}
+		
+		// 绑定纹理和采样器到管线
+		unsigned short texture_index = 0;
+		assert(mat.getGLTextures().size() <= 32);
+		for (auto& pair : mat.getGLTextures()) {
+			auto uniform_name = pair.first;
+			auto gl_texture = pair.second;
+			glActiveTexture(GL_TEXTURE0 + texture_index);
+
+			if (std::find(m_textures.cbegin(), m_textures.cend(), gl_texture) != m_textures.cend())
+			{
+				glBindTexture(GL_TEXTURE_2D, gl_texture);
+			}
+			else if (std::find(m_cubemapTextures.cbegin(), m_cubemapTextures.cend(), gl_texture) != m_cubemapTextures.cend())
+			{
+				glBindTexture(GL_TEXTURE_CUBE_MAP, gl_texture);
+			}
+			else {
+				CONSOLE_PRINTF("glBindTexture type error !\n")
+				continue;
+			}
+
+			glUniform1i(program_info_map[uniform_name], texture_index);
+			texture_index++;
+		}
+	}
+
 }
 
-void GLContext::drawCommand(const std::vector<glm::vec3>& vertices, const std::vector<unsigned short>& indices)
+void GLContext::drawCommand(
+	const std::vector<glm::vec3>& vertices,
+	const std::vector<glm::vec2>& coords,
+	const std::vector<glm::vec3>& normals,
+	const std::vector<unsigned short>& indices	
+)
 {
+	assert(vertices.size() > 0);
+	assert(indices.size() > 0);
+
 	//顶点posistion数据
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
 	glVertexAttribPointer(
-		0,  // The attribute we want to configure
+		0,					// The attribute we want to configure
 		3,                  // size
 		GL_FLOAT,           // type
 		GL_FALSE,           // normalized?
 		0,                  // stride
 		(void*)0            // array buffer offset
 	);
+
+	if (coords.size() > 0)
+	{
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, m_uvBuffer);
+		glBufferData(GL_ARRAY_BUFFER, coords.size() * sizeof(glm::vec2), &coords[0], GL_STATIC_DRAW);
+
+		glVertexAttribPointer(
+			1,					// The attribute we want to configure
+			2,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+	}
+	
+	if (normals.size() > 0)
+	{
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, m_normalBuffer);
+		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+
+		glVertexAttribPointer(
+			2,					// The attribute we want to configure
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+	}
 
 	//顶点索引数据
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBuffer);
@@ -161,6 +261,8 @@ void GLContext::drawCommand(const std::vector<glm::vec3>& vertices, const std::v
 	);
 
 	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
 }
 
 void GLContext::present() {
@@ -174,6 +276,9 @@ void GLContext::destroy() {
 		glDeleteProgram(pair.first);
 	}
 	m_programs_info_map.clear();
+
+	glDeleteTextures(m_textures.size(), &m_textures[0]);
+	m_textures.clear();
 
 	glDeleteVertexArrays(1, &m_vertexArray);
 	glDeleteBuffers(1, &m_vertexBuffer);
@@ -396,4 +501,14 @@ void GLContext::getCursorPos(double& xpos, double& ypos) {
 int GLContext::getKeyState(int key) {
 	assert(s_glWindow != nullptr);
 	return glfwGetKey(s_glWindow, key);
+}
+
+void GLContext::setFaceCulling(bool enabled, bool is_back) {
+	if (enabled) {
+		glEnable(GL_CULL_FACE);
+		glCullFace(is_back ? GL_BACK : GL_FRONT);
+	}
+	else {
+		glDisable(GL_CULL_FACE);
+	}
 }

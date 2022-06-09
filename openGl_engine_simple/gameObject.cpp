@@ -34,8 +34,14 @@ void GameObject::Draw() {
 	for (auto& mesh : m_meshes)
 	{
 		GLContext::Instance()->setMaterial(m_material);
-		GLContext::Instance()->drawCommand(mesh.getVertices(), mesh.getIndices());
+		GLContext::Instance()->drawCommand(mesh.getVertices(), mesh.getCoords(), mesh.getNormals(),  mesh.getIndices());
 	}
+}
+
+glm::mat4 GameObject::getModelViewMatrix() {
+	auto current_scene = SceneManager::Instance()->getCurrentScene();
+	auto main_camera = current_scene->getMainCamera();
+	return main_camera->getViewMatrix() * getModelMatrix();
 }
 
 glm::mat4 GameObject::getModelViewProjectionMatrix() {

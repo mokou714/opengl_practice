@@ -24,6 +24,7 @@ namespace simple_engine {
 		glm::quat getRotation() { return m_rotation; }
 		float getScale() { return m_scale; }
 		glm::mat4 getModelMatrix();
+		glm::mat4 getModelViewMatrix();
 		glm::mat4 getModelViewProjectionMatrix();
 		glm::vec4 getForward();	//local -z 方向
 		glm::vec4 getRight(); //local x 方向

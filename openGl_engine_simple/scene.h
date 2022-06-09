@@ -27,10 +27,11 @@ namespace simple_engine {
 		virtual void render();
 		virtual void logic();
 
-	private:
+	protected:
 		bool inited;
 		Camera* mainCamera;
 		std::string m_name;
 		std::vector<GameObject*> m_gameObjects;
+		GameObject* m_skybox;
 	};
 }
