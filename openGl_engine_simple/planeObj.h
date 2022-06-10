@@ -6,7 +6,6 @@ namespace simple_engine {
 	{
 	public:
 		PlaneObj(std::string name);
-		void Update() override;
 	};
 }
 

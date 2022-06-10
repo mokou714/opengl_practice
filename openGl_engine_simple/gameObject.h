@@ -24,6 +24,8 @@ namespace simple_engine {
 		glm::quat getRotation() { return m_rotation; }
 		float getScale() { return m_scale; }
 		glm::mat4 getModelMatrix();
+		glm::mat4 getViewMatrix();
+		glm::mat4 getProjectionMatrix();
 		glm::mat4 getModelViewMatrix();
 		glm::mat4 getModelViewProjectionMatrix();
 		glm::vec4 getForward();	//local -z ·½Ïò
@@ -37,6 +39,7 @@ namespace simple_engine {
 		void setPosition(glm::vec3 pos) { m_position = pos; }
 		void setScale(float scale) { m_scale = scale; }
 		void setRotation(glm::quat rotation) { m_rotation = rotation; }
+		void setMaterial(Material mat) { m_material = mat; }
 
 	protected:
 		std::string m_name;

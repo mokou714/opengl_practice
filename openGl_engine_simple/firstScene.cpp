@@ -4,6 +4,7 @@
 #include "cubeObj.h"
 #include "suzanneObj.h"
 #include "skybox.h"
+#include "enviromentMappingMat.h"
 
 using namespace simple_engine;
 
@@ -39,15 +40,12 @@ bool FirstScene::init() {
 	suzanne->setPositionY(30.0f);
 	addGameObjects(suzanne);
 
-	m_skybox = new Skybox("skybox");
-	m_skybox->getMaterial().setCubemapTextureFiles("skyCubemap",
-		"textures/cubemap/miramar_lf.tga",
-		"textures/cubemap/miramar_rt.tga",
-		"textures/cubemap/miramar_up.tga",
-		"textures/cubemap/miramar_dn.tga",
-		"textures/cubemap/miramar_bk.tga",
-		"textures/cubemap/miramar_ft.tga"
-	);
+	GameObject* envSphere = new SphereObj("enviromentSphere");
+	envSphere->setScale(10.0f);
+	envSphere->setPositionY(80.0f);
+	envSphere->setMaterial(EnviromentMappingMat());
+	addGameObjects(envSphere);
 
+	m_skybox = new Skybox("skybox");
 	return true;
 }

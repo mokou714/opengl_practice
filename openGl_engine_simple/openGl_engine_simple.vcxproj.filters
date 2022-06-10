@@ -115,6 +115,18 @@
     <ClCompile Include="skybox.cpp">
       <Filter>gameobjects</Filter>
     </ClCompile>
+    <ClCompile Include="baseColorMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="enviromentMappingMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="phongShadingMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="skyboxMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
@@ -195,6 +207,18 @@
     <ClInclude Include="skybox.h">
       <Filter>gameobjects</Filter>
     </ClInclude>
+    <ClInclude Include="baseColorMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="enviromentMappingMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="phongShadingMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="skyboxMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="笔记.txt" />
@@ -216,6 +240,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="materials\Skybox.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\EnvirmentMapping.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\EnvirmentMapping.ps">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

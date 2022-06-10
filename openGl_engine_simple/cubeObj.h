@@ -6,7 +6,6 @@ namespace simple_engine {
 	{
 	public:
 		CubeObj(std::string name);
-		void Update() override;
 	};
 }
 

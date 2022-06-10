@@ -6,7 +6,6 @@ namespace simple_engine {
 	{
 	public:
 		SphereObj(std::string name);
-		void Update() override;
 	};
 }
 

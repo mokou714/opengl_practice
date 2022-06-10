@@ -3,7 +3,7 @@
 
 using namespace simple_engine;
 
-Camera::Camera(std::string name): GameObject(name), m_fov(45.0f), m_near(0.01f), m_far(1000.0f)
+Camera::Camera(std::string name): GameObject(name), m_fov(45.0f), m_near(0.01f), m_far(2000.0f)
 {
 	m_position.z += 80;
 	m_position.y += 100;

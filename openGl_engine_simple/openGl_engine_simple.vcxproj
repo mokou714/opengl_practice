@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="baseColorMat.h" />
     <ClInclude Include="baseLight.h" />
     <ClInclude Include="baseRenderer.h" />
     <ClInclude Include="camera.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="cubeObj.h" />
     <ClInclude Include="directLight.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="enviromentMappingMat.h" />
     <ClInclude Include="firstScene.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="gl.h" />
@@ -161,12 +163,14 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="phongShadingMat.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="planeObj.h" />
     <ClInclude Include="rendererManager.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sceneManager.h" />
     <ClInclude Include="skybox.h" />
+    <ClInclude Include="skyboxMat.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="sphereObj.h" />
     <ClInclude Include="suzanne.h" />
@@ -174,6 +178,7 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="baseColorMat.cpp" />
     <ClCompile Include="baseLight.cpp" />
     <ClCompile Include="baseRenderer.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -182,6 +187,7 @@
     <ClCompile Include="cubeObj.cpp" />
     <ClCompile Include="directLight.cpp" />
     <ClCompile Include="engine.cpp" />
+    <ClCompile Include="enviromentMappingMat.cpp" />
     <ClCompile Include="firstScene.cpp" />
     <ClCompile Include="gameObject.cpp" />
     <ClCompile Include="gl.cpp" />
@@ -190,12 +196,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="phongShadingMat.cpp" />
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="planeObj.cpp" />
     <ClCompile Include="rendererManager.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="skybox.cpp" />
+    <ClCompile Include="skyboxMat.cpp" />
     <ClCompile Include="sphere.cpp" />
     <ClCompile Include="sphereObj.cpp" />
     <ClCompile Include="suzanne.cpp" />
@@ -208,6 +216,8 @@
   <ItemGroup>
     <None Include="materials\BaseColor.ps" />
     <None Include="materials\BaseColor.vs" />
+    <None Include="materials\EnvirmentMapping.ps" />
+    <None Include="materials\EnvirmentMapping.vs" />
     <None Include="materials\PhongShading.ps" />
     <None Include="materials\PhongShading.vs" />
     <None Include="materials\Skybox.ps" />

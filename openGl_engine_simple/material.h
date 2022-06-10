@@ -5,6 +5,17 @@
 
 namespace simple_engine{
 
+	enum class SHADER_SEMANTICS {
+		W,
+		V,
+		P,
+		WVP,
+		WV,
+		CAMERA_POSITION,
+		LIGHT_DIR,
+	};
+
+
 	class Material
 	{
 	public:
@@ -25,13 +36,13 @@ namespace simple_engine{
 		const std::unordered_map<std::string, glm::vec4>& getUniforms4f() { return m_uniforms4f; }
 		const std::unordered_map<std::string, glm::vec3>& getUniforms3f() { return m_uniforms3f; }
 		const std::unordered_map<std::string, glm::mat4>& getUniformsMat4() { return m_uniformsMat4; }
-
+		const std::unordered_map<std::string, SHADER_SEMANTICS>& getSemanticsMap() { return m_semanticsMap; }
 		
 		void setShaderFiles(std::string vs, std::string ps) { m_vertex_shader = vs; m_pixel_shader = ps; }
 		void setTextureFile(const char* uniform_name, const char* file) { m_textures[uniform_name] = file; }
 		void setCubemapTextureFiles(const char* uniform_name, const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back);
 
-	private:
+	protected:
 		//uniform name, data
 		std::unordered_map<std::string, glm::vec4> m_uniforms4f;
 		std::unordered_map<std::string, glm::vec3> m_uniforms3f;
@@ -40,6 +51,9 @@ namespace simple_engine{
 		std::unordered_map<std::string, std::vector<const char*>> m_cubemapTextures;	// right left top bottom back front的顺序 和gl枚举定义顺序一致
 		std::string m_vertex_shader;
 		std::string m_pixel_shader;
+		
+		//uniform name -> semantic
+		std::unordered_map<std::string, SHADER_SEMANTICS> m_semanticsMap;
 
 		//todo gl设备层的数据是否要放在这？
 		GLuint m_glShaderProgram;

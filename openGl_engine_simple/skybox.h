@@ -6,7 +6,6 @@ namespace simple_engine {
 	{
 	public:
 		Skybox(std::string name);
-		void Update() override;
 		void Draw() override;
 	};
 }

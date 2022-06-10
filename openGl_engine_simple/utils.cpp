@@ -500,9 +500,16 @@ GLuint Utils::createCubemap(std::vector<const char*> files) {
 	unsigned char* data;
 	for (unsigned int i = 0; i < files.size(); i++)
 	{
+		GLenum target = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
+		if (target == GL_TEXTURE_CUBE_MAP_POSITIVE_Y || target == GL_TEXTURE_CUBE_MAP_NEGATIVE_Y) {
+			stbi_set_flip_vertically_on_load(0);
+		}
+		else {
+			stbi_set_flip_vertically_on_load(0);
+		}
 		data = stbi_load(files[i], &width, &height, &nrChannels, 0);
 		glTexImage2D(
-			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+			target,
 			0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
 		);
 	}

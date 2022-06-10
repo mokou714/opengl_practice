@@ -6,7 +6,6 @@ namespace simple_engine {
 	{
 	public:
 		SuzanneObj(std::string name);
-		void Update() override;
 	};
 }
 

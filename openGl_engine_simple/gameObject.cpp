@@ -25,6 +25,60 @@ void GameObject::Update() {
 
 	m_inputDeltaTranslation = glm::vec3(0.0, 0.0, 0.0);
 	m_inputDeltaRotation = glm::quat();
+
+	//todo 换个更好的地方更新语义 区分动态和静态的数据 静态数据的语义不用每个update都更新
+	for (auto& pair : m_material.getSemanticsMap()) {
+		auto uniform_name = pair.first;
+		auto semantic_type = pair.second;
+		switch (semantic_type)
+		{
+		case SHADER_SEMANTICS::W:
+		{ 
+			m_material.setUniformMat4(uniform_name.c_str(), getModelMatrix());
+		}
+		break;
+
+		case SHADER_SEMANTICS::V:
+		{
+			m_material.setUniformMat4(uniform_name.c_str(), getViewMatrix());
+		}
+		break;
+
+		case SHADER_SEMANTICS::P:
+		{
+			m_material.setUniformMat4(uniform_name.c_str(), getProjectionMatrix());
+		}
+		break;
+
+		case SHADER_SEMANTICS::WV:
+		{
+			m_material.setUniformMat4(uniform_name.c_str(), getModelViewMatrix());
+		}
+		break;
+
+		case SHADER_SEMANTICS::WVP:
+		{
+			m_material.setUniformMat4(uniform_name.c_str(), getModelViewProjectionMatrix());
+		}
+		break;
+
+		case SHADER_SEMANTICS::CAMERA_POSITION:
+		{
+			auto current_scene = SceneManager::Instance()->getCurrentScene();
+			auto main_camera = current_scene->getMainCamera();
+			m_material.setUniform3f(uniform_name.c_str(), main_camera->getPosition());
+		}
+
+		case SHADER_SEMANTICS::LIGHT_DIR:
+		{
+			//todo
+		}
+		break;
+
+		default:
+			break;
+		}
+	}
 }
 
 void GameObject::Draw() {
@@ -55,6 +109,18 @@ glm::mat4 GameObject::getModelMatrix() {
 	glm::mat4 translation_mat = glm::translate(glm::mat4(), getPosition());
 	glm::mat4 scaling_mat = glm::scale(glm::mat4(), glm::vec3(getScale()));
 	return translation_mat * rotation_mat * scaling_mat;
+}
+
+glm::mat4 GameObject::getViewMatrix() {
+	auto current_scene = SceneManager::Instance()->getCurrentScene();
+	auto main_camera = current_scene->getMainCamera();
+	return main_camera->getViewMatrix();
+}
+
+glm::mat4 GameObject::getProjectionMatrix() {
+	auto current_scene = SceneManager::Instance()->getCurrentScene();
+	auto main_camera = current_scene->getMainCamera();
+	return main_camera->getProjectionMatrix();
 }
 
 void GameObject::HandleInputTranslation(const glm::vec3& deltaTranslation)
