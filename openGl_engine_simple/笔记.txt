@@ -7,13 +7,18 @@
 调整、优化摄像机视角。pitch角度应该为局部？ok
 
 2022.6.7
+2022.6.11
 创建示例场景，增加多个基础几何物体。平面ok，球ok，正方体ok，长方体 略，等
 纹理mapping。ok
 天空盒cubemap ok。
 派生材质类，语义和数据的绑定，分离材质参数更新和逻辑帧更新。ok
 增加自定义管线状态处理。
-找一些复杂的模型，实现一些光照模型计算。
-尝试各种阴影算法。
-后处理，屏幕空间算法、ray marching、体积光、ssao等等
-
+光照模型: phong shading ok. cook-torrance.
+尝试各种阴影算法: shadow mapping, pcf, 软阴影。
+半透明材质，各种blend方式。
+uv动画，顶点动画，水体模拟。
+多光源，点光源，投射光源。
+gpu粒子特效，compute shader的gpu 编程。
+后处理，屏幕空间算法、射线检测、ray marching、体积光、ssao等。
+简单几何物体场景的raying tracing。
 
