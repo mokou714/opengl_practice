@@ -10,11 +10,11 @@ EnviromentMappingMat::EnviromentMappingMat(): Material(){
 		"textures/cubemap/exosystem/exosystem_lf.jpg",
 		"textures/cubemap/exosystem/exosystem_up_.jpg",
 		"textures/cubemap/exosystem/exosystem_dn_.jpg",
+		"textures/cubemap/exosystem/exosystem_bk.jpg",
 		"textures/cubemap/exosystem/exosystem_ft.jpg",
-		"textures/cubemap/exosystem/exosystem_bk.jpg"
 	};
 
 	m_semanticsMap["wvp"] = SHADER_SEMANTICS::WVP;
-	m_semanticsMap["wv"] = SHADER_SEMANTICS::WV;
+	m_semanticsMap["w"] = SHADER_SEMANTICS::W;
 	m_semanticsMap["eye_w"] = SHADER_SEMANTICS::CAMERA_POSITION;
 }

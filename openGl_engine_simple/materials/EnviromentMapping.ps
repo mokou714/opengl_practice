@@ -9,6 +9,6 @@ in vec4 v_pos;
 out vec4 color;
 
 void main() {
-    vec3 view_dir = normalize(eye_w - v_pos.xyz);
+    vec3 view_dir = -normalize(eye_w - v_pos.xyz);
     color = texture(envirmentTexture, reflect(view_dir, v_normal.xyz));
 }

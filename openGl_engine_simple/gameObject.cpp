@@ -68,6 +68,7 @@ void GameObject::Update() {
 			auto main_camera = current_scene->getMainCamera();
 			m_material.setUniform3f(uniform_name.c_str(), main_camera->getPosition());
 		}
+		break;
 
 		case SHADER_SEMANTICS::LIGHT_DIR:
 		{

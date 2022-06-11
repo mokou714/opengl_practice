@@ -41,8 +41,8 @@ bool FirstScene::init() {
 	addGameObjects(suzanne);
 
 	GameObject* envSphere = new SphereObj("enviromentSphere");
-	envSphere->setScale(10.0f);
-	envSphere->setPositionY(80.0f);
+	envSphere->setScale(5.0f);
+	envSphere->setPositionY(170.0f);
 	envSphere->setMaterial(EnviromentMappingMat());
 	addGameObjects(envSphere);
 
