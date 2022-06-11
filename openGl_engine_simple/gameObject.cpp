@@ -72,7 +72,18 @@ void GameObject::Update() {
 
 		case SHADER_SEMANTICS::LIGHT_DIR:
 		{
-			//todo
+			auto current_scene = SceneManager::Instance()->getCurrentScene();
+			if (current_scene->getLights().size() > 0)
+			{	
+				for (auto light : current_scene->getLights())
+				{
+					if (light->getLightType() == LIGHT_TYPE::DIRECT || light->getLightType() == LIGHT_TYPE::PROJECTION)
+					{
+						m_material.setUniform3f(uniform_name.c_str(), light->getLightDir());
+						break;
+					}
+				}	
+			}
 		}
 		break;
 

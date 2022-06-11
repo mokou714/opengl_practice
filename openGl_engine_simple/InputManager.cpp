@@ -35,6 +35,10 @@ InputManager::InputManager():
 		{KeyCode::LEFT_MOUSE,	KeyState::None},
 		{KeyCode::RIGHT_MOUSE,	KeyState::None},
 		{KeyCode::MIDDLE_MOUSE, KeyState::None},
+		{KeyCode::LEFT_ARROW,	KeyState::None},
+		{KeyCode::RIGHT_ARROW,	KeyState::None},
+		{KeyCode::UP_ARROW,		KeyState::None},
+		{KeyCode::DOWN_ARROW,	KeyState::None},
 	},
 	m_mouseX(SE_WINDOW_WIDTH / 2.0), m_mouseY(SE_WINDOW_HEIGHT / 2.0), m_deltaMouseX(0), m_deltaMouseY(0)
 {

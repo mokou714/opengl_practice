@@ -33,9 +33,11 @@ namespace simple_engine{
 		const std::unordered_map<std::string, std::vector<const char*>>& getCubemapTextureResources() { return m_cubemapTextures; }
 		const std::string& getVSFile() { return m_vertex_shader; }
 		const std::string& getPSFile() { return m_pixel_shader; }
+		const std::unordered_map<std::string, glm::mat4>& getUniformsMat4() { return m_uniformsMat4; }
 		const std::unordered_map<std::string, glm::vec4>& getUniforms4f() { return m_uniforms4f; }
 		const std::unordered_map<std::string, glm::vec3>& getUniforms3f() { return m_uniforms3f; }
-		const std::unordered_map<std::string, glm::mat4>& getUniformsMat4() { return m_uniformsMat4; }
+		const std::unordered_map<std::string, glm::vec2>& getUniforms2f() { return m_uniforms2f; }
+		const std::unordered_map<std::string, float>& getUniforms1f() { return m_uniforms1f; }
 		const std::unordered_map<std::string, SHADER_SEMANTICS>& getSemanticsMap() { return m_semanticsMap; }
 		
 		void setShaderFiles(std::string vs, std::string ps) { m_vertex_shader = vs; m_pixel_shader = ps; }
@@ -46,6 +48,8 @@ namespace simple_engine{
 		//uniform name, data
 		std::unordered_map<std::string, glm::vec4> m_uniforms4f;
 		std::unordered_map<std::string, glm::vec3> m_uniforms3f;
+		std::unordered_map<std::string, glm::vec2> m_uniforms2f;
+		std::unordered_map<std::string, float> m_uniforms1f;
 		std::unordered_map<std::string, glm::mat4> m_uniformsMat4;
 		std::unordered_map<std::string, const char*> m_textures;	//uniform名 -> 文件路径
 		std::unordered_map<std::string, std::vector<const char*>> m_cubemapTextures;	// right left top bottom back front的顺序 和gl枚举定义顺序一致

@@ -16,6 +16,11 @@ Scene::~Scene() {
 		delete obj;
 	}
 	m_gameObjects.clear();
+	for (auto light : m_lights) {
+		delete light;
+	}
+	m_lights.clear();
+
 	mainCamera = nullptr;
 	if (m_skybox) {
 		delete m_skybox;
@@ -56,7 +61,11 @@ void Scene::logic() {
 		return;
 	}
 
-	for (auto& obj : getGameObjects()) {
+	for (auto light : getLights()) {
+		light->Update();
+	}
+
+	for (auto obj : getGameObjects()) {
 		obj->Update();
 	}
 

@@ -5,6 +5,7 @@
 #include "suzanneObj.h"
 #include "skybox.h"
 #include "enviromentMappingMat.h"
+#include "directLight.h"
 
 using namespace simple_engine;
 
@@ -47,5 +48,10 @@ bool FirstScene::init() {
 	addGameObjects(envSphere);
 
 	m_skybox = new Skybox("skybox");
+
+	BaseLight* dir_light = new DirectLight("direct light");
+	dir_light->setBeingControlled(true);
+	m_lights.push_back(dir_light);
+
 	return true;
 }

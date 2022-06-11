@@ -3,6 +3,7 @@
 #include <vector>
 #include "gameObject.h"
 #include "camera.h"
+#include "directLight.h"
 
 namespace simple_engine {
 	/*
@@ -18,6 +19,7 @@ namespace simple_engine {
 		bool removeGameObjectByName(std::string name);
 		const std::vector<GameObject*>& getGameObjects();
 		Camera* getMainCamera() { return mainCamera; };
+		const std::vector<BaseLight*>& getLights() { return m_lights; }
 		void setMainCamera(Camera* camera) { mainCamera = camera; }
 		std::string getName();
 
@@ -33,5 +35,6 @@ namespace simple_engine {
 		std::string m_name;
 		std::vector<GameObject*> m_gameObjects;
 		GameObject* m_skybox;
+		std::vector<BaseLight*> m_lights;
 	};
 }
