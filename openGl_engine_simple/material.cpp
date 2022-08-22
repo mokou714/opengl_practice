@@ -17,3 +17,6 @@ void Material::setCubemapTextureFiles(const char* uniform_name, const char* righ
 	};
 }
 
+void Material::setCubemapTextureFiles(const char* uniform_name, std::vector<const char*> texture_files) {
+	m_cubemapTextures[uniform_name] = texture_files;
+}

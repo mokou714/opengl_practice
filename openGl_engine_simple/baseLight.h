@@ -1,5 +1,5 @@
 #pragma once
-#include "gl.h"
+#include "deviceCommon.h"
 #include <string>
 
 namespace simple_engine {

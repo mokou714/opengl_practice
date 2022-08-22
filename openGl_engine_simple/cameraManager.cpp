@@ -16,7 +16,7 @@ CameraManager* CameraManager::Instance() {
 	return s_cameraManager;
 }
 
-void CameraManager::destroy() {
+void CameraManager::Destroy() {
 	if (s_cameraManager) {
 		delete s_cameraManager;
 		s_cameraManager = nullptr;

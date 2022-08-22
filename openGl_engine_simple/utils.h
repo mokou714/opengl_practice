@@ -1,13 +1,14 @@
 #pragma once
 #include <vector>
 #include <map>
-#include "gl.h"
+#include "deviceCommon.h"
 #include <vector>
 #include <stdio.h>
 #include <string>
 #include <cstring>
 #include <stdio.h>
 #include <stdlib.h>
+#include "glHelper.h"
 
 namespace simple_engine {
 

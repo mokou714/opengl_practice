@@ -14,20 +14,19 @@ namespace simple_engine {
 	public:
 		static Engine* Instance();
 
-		bool init();
-		void run();
-		void stop();
-
-		void doLogic();
-		void doRender();
-		void beginFrame();
-		void endFrame();
-
-		void destroy();
+		bool Initialize();
+		void Run();
+		void Stop();
+		void DoLogic();
+		void DoRender();
+		void BeginFrame();
+		void EndFrame();
+		void Destroy();
 
 	private:
 		static Engine* s_engine;
 		bool is_running;
+		size_t m_frame_count;
 		
 		std::unordered_map<std::string, std::vector<GenericFunc<>>> m_inputEventsMap;
 		Engine();

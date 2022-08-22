@@ -22,25 +22,25 @@ void BaseLight::Update() {
 	auto z_axis = glm::vec3(0.0, 0.0, -1.0);
 
 	// 方向键旋转控制(依世界空间坐标轴)
-	auto up_state = input_manager->getKeyState(KeyCode::UP_ARROW);
-	auto left_state = input_manager->getKeyState(KeyCode::LEFT_ARROW);
-	auto down_state = input_manager->getKeyState(KeyCode::DOWN_ARROW);
-	auto right_state = input_manager->getKeyState(KeyCode::RIGHT_ARROW);
+	auto up_state = input_manager->getKeyState(CommonKeyCode::UP_ARROW);
+	auto left_state = input_manager->getKeyState(CommonKeyCode::LEFT_ARROW);
+	auto down_state = input_manager->getKeyState(CommonKeyCode::DOWN_ARROW);
+	auto right_state = input_manager->getKeyState(CommonKeyCode::RIGHT_ARROW);
 	float delta_x = 0.0f;
 	float delta_z = 0.0f;
-	if (up_state == KeyState::Pressed || up_state == KeyState::Repeated)
+	if (up_state == CommonKeyState::PRESSED || up_state == CommonKeyState::REPEATED)
 	{
 		delta_x += 8.0f;
 	}
-	if (down_state == KeyState::Pressed || down_state == KeyState::Repeated)
+	if (down_state == CommonKeyState::PRESSED || down_state == CommonKeyState::REPEATED)
 	{
 		delta_x -= 8.0f;
 	}
-	if (left_state == KeyState::Pressed || left_state == KeyState::Repeated)
+	if (left_state == CommonKeyState::PRESSED || left_state == CommonKeyState::REPEATED)
 	{
 		delta_z += 8.0f;
 	}
-	if (right_state == KeyState::Pressed || right_state == KeyState::Repeated)
+	if (right_state == CommonKeyState::PRESSED || right_state == CommonKeyState::REPEATED)
 	{
 		delta_z -= 8.0f;
 	}

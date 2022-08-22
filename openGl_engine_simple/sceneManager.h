@@ -7,7 +7,8 @@ namespace simple_engine {
 
 	enum TemplateScene {
 		None = 0,
-		FirstSampleScene
+		FirstSampleScene,
+		GraphicHW1,
 	};
 
 
@@ -20,7 +21,7 @@ namespace simple_engine {
 		bool removeScene(std::string name);
 		void setCurrentScene(Scene* scene);
 		Scene* getCurrentScene() { return currentScene; }
-		void destroy();
+		void Destroy();
 	private:
 		static SceneManager* s_sceneManager;
 		SceneManager();

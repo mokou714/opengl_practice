@@ -1,5 +1,6 @@
 #include "gameObject.h"
 #include "sceneManager.h"
+#include "Graphics.h"
 
 using namespace simple_engine;
 
@@ -98,9 +99,12 @@ void GameObject::Draw() {
 	* 每个sub mesh设置shader program参数，然后draw
 	*/
 	for (auto& mesh : m_meshes)
-	{
-		GLContext::Instance()->setMaterial(m_material);
-		GLContext::Instance()->drawCommand(mesh.getVertices(), mesh.getCoords(), mesh.getNormals(),  mesh.getIndices());
+	{	
+		IRenderContext* context = Graphics::Instance()->FetchRenderContext();
+		context->SetMaterial(m_material);
+		context->SetPipelineState(m_pipeline_state);
+		context->DrawCommand(mesh.getVertices(), mesh.getCoords(), mesh.getNormals(),  mesh.getIndices());
+		context->DrawIndexed(mesh.getIndices().size(), 0);
 	}
 }
 
@@ -156,4 +160,21 @@ glm::vec4 GameObject::getRight() {
 
 glm::vec4 GameObject::getUp() {
 	return glm::normalize(glm::toMat4(m_rotation) * glm::vec4(0.0, 1.0, 0.0, 0.0));
+}
+
+void GameObject::setRotationX(float angle)
+{
+	glm::vec3 euler_angles = glm::eulerAngles(m_rotation);
+	euler_angles.x = angle;
+	m_rotation = glm::quat(euler_angles);
+}
+
+void GameObject::setRotationY(float angle)
+{
+
+}
+
+void GameObject::setRotationZ(float angle)
+{
+
 }

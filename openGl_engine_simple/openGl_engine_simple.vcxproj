@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{4afabf87-645d-4253-bf73-05a0c553d569}</ProjectGuid>
     <RootNamespace>openGlenginesimple</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -119,13 +119,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;TW_STATIC;TW_NO_LIB_PRAGMA;TW_NO_DIRECT3D;GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\SOIL\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\Assimp\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glad\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glm;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\GLFW\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\nuklear\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\pugixml\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\stb;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glew-1.13.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\DirectX-Headers\include\directx;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\DirectXTK12\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\SOIL\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\Assimp\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glad\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glm;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\GLFW\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\nuklear\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\pugixml\include;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\stb;F:\GL Projects\openGl_engine_simple\openGl_engine_simple\external\glew-1.13.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;external\GLFW\lib-vc2015\glfw3.lib;external\glew-1.13.0\bin\GLEW_1130.lib;external\Assimp\assimp-vc140-mt.lib;winmm.lib;external\SOIL\SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.19041.0\um\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;external\GLFW\lib-vc2015\glfw3.lib;external\glew-1.13.0\bin\GLEW_1130.lib;external\Assimp\assimp-vc140-mt.lib;winmm.lib;external\SOIL\SOIL.lib;d3d12.lib;d3dcompiler.lib;dxgi.lib;external\DirectXTK12\DirectXTK12.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -153,19 +153,35 @@
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="cubeObj.h" />
+    <ClInclude Include="Display.h" />
+    <ClInclude Include="dx12Context.h" />
+    <ClInclude Include="dx12Device.h" />
+    <ClInclude Include="dx12Helper.h" />
+    <ClInclude Include="glHelper.h" />
+    <ClInclude Include="glCommon.h" />
+    <ClInclude Include="glDevice.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GpuBuffer.h" />
+    <ClInclude Include="PipelineStateObject.h" />
+    <ClInclude Include="ITexture.h" />
+    <ClInclude Include="IRenderDevice.h" />
     <ClInclude Include="directLight.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="enviromentMappingMat.h" />
     <ClInclude Include="firstScene.h" />
     <ClInclude Include="gameObject.h" />
-    <ClInclude Include="gl.h" />
+    <ClInclude Include="deviceCommon.h" />
     <ClInclude Include="glContext.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="magicDoorScene.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="messageEventsManager.h" />
+    <ClInclude Include="noColorMat.h" />
     <ClInclude Include="phongShadingMat.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="planeObj.h" />
+    <ClInclude Include="IRenderContext.h" />
     <ClInclude Include="rendererManager.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sceneManager.h" />
@@ -185,17 +201,30 @@
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="cubeObj.cpp" />
+    <ClCompile Include="Display.cpp" />
+    <ClCompile Include="dx12Context.cpp" />
+    <ClCompile Include="dx12Device.cpp" />
+    <ClCompile Include="dx12Helper.cpp" />
+    <ClCompile Include="glDevice.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GpuBuffer.cpp" />
+    <ClCompile Include="PipelineStateObject.cpp" />
+    <ClCompile Include="IRenderContext.cpp" />
+    <ClCompile Include="IRenderDevice.cpp" />
+    <ClCompile Include="ITexture.cpp" />
     <ClCompile Include="directLight.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="enviromentMappingMat.cpp" />
     <ClCompile Include="firstScene.cpp" />
     <ClCompile Include="gameObject.cpp" />
-    <ClCompile Include="gl.cpp" />
     <ClCompile Include="glContext.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="magicDoorScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="messageEventsManager.cpp" />
+    <ClCompile Include="noColorMat.cpp" />
     <ClCompile Include="phongShadingMat.cpp" />
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="planeObj.cpp" />
@@ -216,8 +245,10 @@
   <ItemGroup>
     <None Include="materials\BaseColor.ps" />
     <None Include="materials\BaseColor.vs" />
-    <None Include="materials\EnvirmentMapping.ps" />
-    <None Include="materials\EnvirmentMapping.vs" />
+    <None Include="materials\EnviromentMapping.ps" />
+    <None Include="materials\EnviromentMapping.vs" />
+    <None Include="materials\NoColor.ps" />
+    <None Include="materials\NoColor.vs" />
     <None Include="materials\PhongShading.ps" />
     <None Include="materials\PhongShading.vs" />
     <None Include="materials\Skybox.ps" />

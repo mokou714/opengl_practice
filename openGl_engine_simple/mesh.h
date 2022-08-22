@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "gl.h"
+#include "deviceCommon.h"
 
 using namespace std;
 

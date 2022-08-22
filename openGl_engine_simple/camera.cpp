@@ -3,7 +3,7 @@
 
 using namespace simple_engine;
 
-Camera::Camera(std::string name): GameObject(name), m_fov(45.0f), m_near(0.01f), m_far(2000.0f)
+Camera::Camera(std::string name): GameObject(name), m_fov(45.0f), m_near(0.01f), m_far(5000.0f)
 {
 	m_position.z += 80;
 	m_position.y += 100;
@@ -17,10 +17,10 @@ void Camera::Update()
 
 	// ÒÆ¶¯¿ØÖÆ
 	auto input_manager = InputManager::Instance();
-	auto w_state = input_manager->getKeyState(KeyCode::W);
-	auto a_state = input_manager->getKeyState(KeyCode::A);
-	auto s_state = input_manager->getKeyState(KeyCode::S);
-	auto d_state = input_manager->getKeyState(KeyCode::D);
+	auto w_state = input_manager->getKeyState(CommonKeyCode::W);
+	auto a_state = input_manager->getKeyState(CommonKeyCode::A);
+	auto s_state = input_manager->getKeyState(CommonKeyCode::S);
+	auto d_state = input_manager->getKeyState(CommonKeyCode::D);
 
 	glm::vec3 delta_forward;
 	glm::vec3 delta_right;
@@ -28,25 +28,21 @@ void Camera::Update()
 	glm::vec3 up = glm::vec3(0.0, 1.0, 0.0);
 	glm::vec3 right = glm::vec3(getRight());
 
-	if (w_state == KeyState::Pressed || w_state == KeyState::Repeated)
+	if (w_state == CommonKeyState::PRESSED || w_state == CommonKeyState::REPEATED)
 	{
-		delta_forward = forward * 1.0f;
-		CONSOLE_PRINTF("Moving forward by dir: %f, %f, %f\n", delta_forward.x, delta_forward.y, delta_forward.z)
+		delta_forward = forward * 0.1f;
 	}
-	if (s_state == KeyState::Pressed || s_state == KeyState::Repeated)
+	if (s_state == CommonKeyState::PRESSED || s_state == CommonKeyState::REPEATED)
 	{
-		delta_forward = -forward * 1.0f;
-		CONSOLE_PRINTF("Moving forward by dir: %f, %f, %f\n", delta_forward.x, delta_forward.y, delta_forward.z)
+		delta_forward = -forward * 0.1f;
 	}
-	if (a_state == KeyState::Pressed || a_state == KeyState::Repeated)
+	if (a_state == CommonKeyState::PRESSED || a_state == CommonKeyState::REPEATED)
 	{
-		delta_right = -right * 1.0f;
-		CONSOLE_PRINTF("Moving left by dir: %f, %f, %f\n", delta_right.x, delta_right.y, delta_right.z)
+		delta_right = -right * 0.1f;
 	}
-	if (d_state == KeyState::Pressed || d_state == KeyState::Repeated)
+	if (d_state == CommonKeyState::PRESSED || d_state == CommonKeyState::REPEATED)
 	{
-		delta_right = right * 1.0f;
-		CONSOLE_PRINTF("Moving left by dir: %f, %f, %f\n", delta_right.x, delta_right.y, delta_right.z)
+		delta_right = right * 0.1f;
 	}
 	m_inputDeltaTranslation += glm::vec3(delta_forward)  + glm::vec3(delta_right);
 
@@ -75,6 +71,7 @@ void Camera::Update()
 		CONSOLE_PRINTF("Right dir: %f, %f, %f\n", right.x, right.y, right.z);
 		CONSOLE_PRINTF("Up dir: %f, %f, %f,\n", up.x, up.y, up.z);
 		CONSOLE_PRINTF("m_rotation: %f, %f, %f,\n", m_rotation.x, m_rotation.y, m_rotation.z);
+		CONSOLE_PRINTF("Current Position: %f, %f, %f,\n", m_position.x, m_position.y, m_position.z);
 		CONSOLE_PRINTF("-------------------------------------\n");
 	}
 

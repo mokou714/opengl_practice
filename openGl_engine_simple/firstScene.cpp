@@ -47,7 +47,7 @@ bool FirstScene::init() {
 	envSphere->setMaterial(EnviromentMappingMat());
 	addGameObjects(envSphere);
 
-	m_skybox = new Skybox("skybox");
+	m_skyboxs.push_back(new Skybox("skybox", SKYBOX_TYPE::ECOSYSTEM));
 
 	BaseLight* dir_light = new DirectLight("direct light");
 	dir_light->setBeingControlled(true);

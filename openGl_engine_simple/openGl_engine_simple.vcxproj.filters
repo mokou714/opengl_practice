@@ -34,6 +34,15 @@
     <Filter Include="light">
       <UniqueIdentifier>{547cd1ed-4e6f-434e-8b2a-dc09a890cd23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dx12">
+      <UniqueIdentifier>{4130267f-7ddb-46ba-8274-2d456cf12efd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="device">
+      <UniqueIdentifier>{0dc8519a-6862-4682-81ea-cef0a26ac531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{43a72e3d-71c3-4344-969d-b69243ccbdc0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine.cpp">
@@ -42,9 +51,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sceneManager.cpp">
       <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="gl.cpp">
-      <Filter>gl</Filter>
     </ClCompile>
     <ClCompile Include="baseRenderer.cpp">
       <Filter>renderer</Filter>
@@ -127,6 +133,48 @@
     <ClCompile Include="skyboxMat.cpp">
       <Filter>material</Filter>
     </ClCompile>
+    <ClCompile Include="magicDoorScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="noColorMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="messageEventsManager.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="dx12Context.cpp">
+      <Filter>dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="dx12Helper.cpp">
+      <Filter>dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="GpuBuffer.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="ITexture.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="PipelineStateObject.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="dx12Device.cpp">
+      <Filter>dx12</Filter>
+    </ClCompile>
+    <ClCompile Include="glDevice.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="IRenderDevice.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="IRenderContext.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="Display.cpp">
+      <Filter>device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
@@ -134,9 +182,6 @@
     </ClInclude>
     <ClInclude Include="sceneManager.h">
       <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="gl.h">
-      <Filter>gl</Filter>
     </ClInclude>
     <ClInclude Include="baseRenderer.h">
       <Filter>renderer</Filter>
@@ -219,6 +264,57 @@
     <ClInclude Include="skyboxMat.h">
       <Filter>material</Filter>
     </ClInclude>
+    <ClInclude Include="magicDoorScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="noColorMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="deviceCommon.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="messageEventsManager.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderDevice.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderContext.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="glCommon.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="glHelper.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="dx12Context.h">
+      <Filter>dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="dx12Helper.h">
+      <Filter>dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="GpuBuffer.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="ITexture.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineStateObject.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="dx12Device.h">
+      <Filter>dx12</Filter>
+    </ClInclude>
+    <ClInclude Include="glDevice.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="Display.h">
+      <Filter>device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="笔记.txt" />
@@ -242,10 +338,16 @@
     <None Include="materials\Skybox.vs">
       <Filter>shaders</Filter>
     </None>
-    <None Include="materials\EnvirmentMapping.vs">
+    <None Include="materials\NoColor.ps">
       <Filter>shaders</Filter>
     </None>
-    <None Include="materials\EnvirmentMapping.ps">
+    <None Include="materials\NoColor.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\EnviromentMapping.ps">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="materials\EnviromentMapping.vs">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

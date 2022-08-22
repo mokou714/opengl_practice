@@ -1,5 +1,6 @@
 #include "sceneManager.h"
 #include "firstScene.h"
+#include "magicDoorScene.h"
 
 using namespace simple_engine;
 
@@ -16,7 +17,7 @@ SceneManager* SceneManager::Instance() {
 	return s_sceneManager;
 }
 
-void SceneManager::destroy() {
+void SceneManager::Destroy() {
 	if (s_sceneManager) {
 		delete s_sceneManager;
 		s_sceneManager = nullptr;
@@ -33,6 +34,9 @@ Scene* SceneManager::createAndAddScene(std::string name, Camera* camera, Templat
 		break;
 	case TemplateScene::FirstSampleScene:
 		newScene = new FirstScene(name, camera);
+		break;
+	case TemplateScene::GraphicHW1:
+		newScene = new MagicDoorScene(name, camera);
 		break;
 	default:
 		newScene = new Scene(name, camera);

@@ -1,7 +1,9 @@
 #pragma once
+#include "deviceCommon.h"
 #include <vector>
 #include <unordered_map>
-#include "gl.h"
+
+#define RUID unsigned int
 
 namespace simple_engine{
 
@@ -24,11 +26,11 @@ namespace simple_engine{
 		void setUniform4f(const char* name, glm::vec4 data) { m_uniforms4f[name] = data; }
 		void setUniform3f(const char* name, glm::vec3 data) { m_uniforms3f[name] = data; }
 		void setUniformMat4(const char* name, glm::mat4 data) { m_uniformsMat4[name] = data; }
-		void setShaderProgram(GLuint program_id) { m_glShaderProgram = program_id; }
-		void addGLTexture(std::string uniform_name, GLuint tex_id) { m_glTextures[uniform_name] = tex_id; }
+		void setShaderProgram(RUID program_id) { m_glShaderProgram = program_id; }
+		void addGLTexture(std::string uniform_name, RUID tex_id) { m_glTextures[uniform_name] = tex_id; }
 
-		GLuint getShaderProgram() { return m_glShaderProgram; }
-		const std::unordered_map<std::string, GLuint>& getGLTextures() { return m_glTextures;}
+		RUID getShaderProgram() { return m_glShaderProgram; }
+		const std::unordered_map<std::string, RUID>& getGLTextures() { return m_glTextures;}
 		const std::unordered_map<std::string, const char*>& getTextureResources() { return m_textures; }
 		const std::unordered_map<std::string, std::vector<const char*>>& getCubemapTextureResources() { return m_cubemapTextures; }
 		const std::string& getVSFile() { return m_vertex_shader; }
@@ -43,6 +45,7 @@ namespace simple_engine{
 		void setShaderFiles(std::string vs, std::string ps) { m_vertex_shader = vs; m_pixel_shader = ps; }
 		void setTextureFile(const char* uniform_name, const char* file) { m_textures[uniform_name] = file; }
 		void setCubemapTextureFiles(const char* uniform_name, const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back);
+		void setCubemapTextureFiles(const char* uniform_name, std::vector<const char*> texture_files);
 
 	protected:
 		//uniform name, data
@@ -60,8 +63,8 @@ namespace simple_engine{
 		std::unordered_map<std::string, SHADER_SEMANTICS> m_semanticsMap;
 
 		//todo gl设备层的数据是否要放在这？
-		GLuint m_glShaderProgram;
-		std::unordered_map<std::string, GLuint> m_glTextures;
+		RUID m_glShaderProgram;
+		std::unordered_map<std::string, RUID> m_glTextures;
 
 	};
 

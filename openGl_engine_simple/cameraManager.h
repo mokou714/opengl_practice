@@ -16,7 +16,7 @@ namespace simple_engine {
 		Camera* createCameraByDefault(std::string name);
 		//Camera* createCameraWithConfig(const CameraConfig& config);
 		bool removeCamera(std::string name);
-		void destroy();
+		void Destroy();
 			
 	private:
 		static CameraManager* s_cameraManager;

@@ -1,13 +1,12 @@
 #include "glContext.h"
 #include <stdio.h>
+#include "glDevice.h"
 
 using namespace simple_engine;
 
 GLContext* GLContext::s_glContext = nullptr;
-GLFWwindow* GLContext::s_glWindow = nullptr;
 
-GLContext::GLContext() 
-	:is_inited(false),
+GLContext::GLContext():
 	m_vertexArray(0),
 	m_vertexBuffer(0),
 	m_uvBuffer(0),
@@ -15,6 +14,7 @@ GLContext::GLContext()
 	m_colorBuffer(0),
 	m_elementBuffer(0)
 {	
+	is_initialized = false;
 }
 
 GLContext* GLContext::Instance() {
@@ -24,47 +24,12 @@ GLContext* GLContext::Instance() {
 	return s_glContext;
 }
 
-bool GLContext::init() {
-	//initialize glfw
-	if (!glfwInit()) {
-		fprintf(stderr, "Failed to initialize GLFW\n");
-		getchar();
+bool GLContext::Initialize() {
+	IRenderContext::Initialize();
+	if (!GLDevice::Instance()->Initialized() || is_initialized)
+	{
 		return false;
 	}
-
-	//create window
-	glfwWindowHint(GLFW_SAMPLES, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	s_glWindow = glfwCreateWindow(SE_WINDOW_WIDTH, SE_WINDOW_HEIGHT, "GL Simple Engine", NULL, NULL);
-
-	if (s_glWindow == nullptr) {
-		fprintf(stderr, "Failed to create window");
-		getchar();
-		glfwTerminate();
-		return false;
-	}
-	glfwMakeContextCurrent(s_glWindow);
-
-	glewExperimental = true;
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed to init glew");
-		getchar();
-		glfwTerminate();
-		return false;
-	}
-
-	glfwSetInputMode(s_glWindow, GLFW_STICKY_KEYS, GL_TRUE);
-	glfwSetInputMode(s_glWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	glfwPollEvents();
-	glfwSetCursorPos(s_glWindow, SE_WINDOW_WIDTH / 2, SE_WINDOW_HEIGHT / 2);
-
-	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
-
 
 	//顶点layout array 
 	glGenVertexArrays(1, &m_vertexArray);
@@ -78,32 +43,70 @@ bool GLContext::init() {
 	glGenBuffers(1, &m_normalBuffer);
 	glGenBuffers(1, &m_elementBuffer);
 
-
-	is_inited = true;
+	is_initialized = true;
 	return true;
 }
 
-void GLContext::resetPipelineState() {
+void GLContext::ResetPipelineState() {
+	IRenderContext::ResetPipelineState();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, SE_WINDOW_WIDTH, SE_WINDOW_HEIGHT);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK); 
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_STENCIL_TEST);
 	glDepthFunc(GL_LESS);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void GLContext::setMaterial(Material& mat)
+void GLContext::SetPipelineState(const PipelineStateObject& state)
+{
+	IRenderContext::SetPipelineState(state);
+	if (state.depth_test_enable)
+	{
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(DepthStencilMap[state.depth_func]);
+	}
+	else
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+	if (state.stencil_test_enable)
+	{
+		glEnable(GL_STENCIL_TEST);
+		glStencilMask(state.stencil_mask);
+		glStencilFunc(DepthStencilMap[state.stencil_func], state.stencil_ref, state.stencil_mask);
+		glStencilOp(DepthStencilMap[state.stencil_op_failed], DepthStencilMap[state.stencil_op_only_depth_failed], DepthStencilMap[state.stencil_op_passed]);
+	}
+	else
+	{
+		glDisable(GL_STENCIL_TEST);
+	}
+
+	if (state.culling_enable) {
+		glEnable(GL_CULL_FACE);
+		glCullFace(CullMap[state.culling_mode]);
+	}
+	else {
+		glDisable(GL_CULL_FACE);
+	}
+}
+
+
+void GLContext::SetMaterial(Material& mat)
 {	
+	IRenderContext::SetMaterial(mat);
 	//创建并绑定shader program
 	GLuint program_id = mat.getShaderProgram();
 	if (!m_programs_info_map.count(program_id)) {
+		CONSOLE_PRINTF("Create Shader Program\n")
 		program_id = createShaderProgram(mat.getVSFile().c_str(), mat.getPSFile().c_str());
 		assert(program_id != 0);
 		m_programs_info_map[program_id] = std::unordered_map<std::string, GLuint>();
 		mat.setShaderProgram(program_id);
 	}
 
+	CONSOLE_PRINTF("Set Shader Program\n")
 	glUseProgram(program_id);
 
 	auto& program_info_map = m_programs_info_map[program_id];
@@ -153,6 +156,7 @@ void GLContext::setMaterial(Material& mat)
 				auto uniform_name = pair.first;
 				auto texture_file = pair.second;
 				GLuint tex_id = Utils::createGLTexture(texture_file);
+				CONSOLE_PRINTF("Create Texture:%d\n", tex_id);
 				if (tex_id) {
 					m_textures.push_back(tex_id);
 					program_info_map[uniform_name] = glGetUniformLocation(program_id, uniform_name.c_str());
@@ -166,6 +170,7 @@ void GLContext::setMaterial(Material& mat)
 			for (auto& pair : mat.getCubemapTextureResources()) {
 				auto uniform_name = pair.first;
 				GLuint cubemap_id = Utils::createCubemap(pair.second);
+				CONSOLE_PRINTF("Create Cube Texture: %d\n", cubemap_id);
 				if (cubemap_id)
 				{
 					m_cubemapTextures.push_back(cubemap_id);
@@ -189,10 +194,12 @@ void GLContext::setMaterial(Material& mat)
 
 			if (std::find(m_textures.cbegin(), m_textures.cend(), gl_texture) != m_textures.cend())
 			{
+				CONSOLE_PRINTF("Bind Texture: %d\n", gl_texture);
 				glBindTexture(GL_TEXTURE_2D, gl_texture);
 			}
 			else if (std::find(m_cubemapTextures.cbegin(), m_cubemapTextures.cend(), gl_texture) != m_cubemapTextures.cend())
 			{
+				CONSOLE_PRINTF("Bind Cube Texture: %d\n", gl_texture);
 				glBindTexture(GL_TEXTURE_CUBE_MAP, gl_texture);
 			}
 			else {
@@ -207,7 +214,7 @@ void GLContext::setMaterial(Material& mat)
 
 }
 
-void GLContext::drawCommand(
+void GLContext::DrawCommand(
 	const std::vector<glm::vec3>& vertices,
 	const std::vector<glm::vec2>& coords,
 	const std::vector<glm::vec3>& normals,
@@ -267,11 +274,16 @@ void GLContext::drawCommand(
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
 
+}
+
+void GLContext::DrawIndexed(unsigned int ElementCount, unsigned int StartVertexOffset)
+{
+	IRenderContext::DrawIndexed(ElementCount, StartVertexOffset);
 	glDrawElements(
-		GL_TRIANGLES,      // mode
-		indices.size(),    // count
-		GL_UNSIGNED_SHORT, // type
-		(void*)0           // element array buffer offset
+		GL_TRIANGLES,		// mode
+		ElementCount,		// count
+		GL_UNSIGNED_SHORT,	// type
+		(void*)StartVertexOffset          // element array buffer offset
 	);
 
 	glDisableVertexAttribArray(0);
@@ -279,20 +291,23 @@ void GLContext::drawCommand(
 	glDisableVertexAttribArray(2);
 }
 
-void GLContext::present() {
-	glfwSwapBuffers(s_glWindow);
+void GLContext::Present() {
+	glfwSwapBuffers(GLDevice::GetGLWindow());
 	glfwPollEvents();
  }
 
-void GLContext::destroy() {
+void GLContext::Destroy() {
 	//清除gpu内存数据
 	for (auto& pair : m_programs_info_map) {
 		glDeleteProgram(pair.first);
 	}
 	m_programs_info_map.clear();
 
-	glDeleteTextures(m_textures.size(), &m_textures[0]);
-	m_textures.clear();
+	if (m_textures.size() > 0)
+	{
+		glDeleteTextures(m_textures.size(), &m_textures[0]);
+		m_textures.clear();
+	}
 
 	glDeleteVertexArrays(1, &m_vertexArray);
 	glDeleteBuffers(1, &m_vertexBuffer);
@@ -301,11 +316,8 @@ void GLContext::destroy() {
 	glDeleteBuffers(1, &m_colorBuffer);
 	glDeleteBuffers(1, &m_elementBuffer);
 	
-	//关闭gl设备, s_glwindow在里面已经释放了
-	glfwTerminate();
 	delete s_glContext;
 	s_glContext = nullptr;
-	s_glWindow = nullptr;
 }
 
 GLuint GLContext::loadTextureFromDDS(const char* dds_path) {
@@ -433,7 +445,6 @@ GLuint GLContext::createShaderProgram(const char* vs_path, const char* ps_path) 
 
 
 	// Compile Vertex Shader
-	printf("Compiling shader : %s\n", ps_path);
 	char const* VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
 	glCompileShader(VertexShaderID);
@@ -450,7 +461,6 @@ GLuint GLContext::createShaderProgram(const char* vs_path, const char* ps_path) 
 
 
 	// Compile Fragment Shader
-	printf("Compiling shader : %s\n", ps_path);
 	char const* FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
 	glCompileShader(FragmentShaderID);
@@ -467,7 +477,6 @@ GLuint GLContext::createShaderProgram(const char* vs_path, const char* ps_path) 
 
 
 	// Link the program
-	printf("Linking program\n");
 	GLuint ProgramID = glCreateProgram();
 	glAttachShader(ProgramID, VertexShaderID);
 	glAttachShader(ProgramID, FragmentShaderID);
@@ -492,37 +501,35 @@ GLuint GLContext::createShaderProgram(const char* vs_path, const char* ps_path) 
 	return ProgramID;
 }
 
+void GLContext::SetVertexBuffer(const VertexBuffer& buf)
+{
+	IRenderContext::SetVertexBuffer(buf);
+}
+
+void GLContext::SetElementBuffer(const ElementBuffer& buf)
+{
+	IRenderContext::SetElementBuffer(buf);
+}
+
+
 void GLContext::setInputKeyHandler(GLFWkeyfun func) {
-	assert(s_glWindow != nullptr);
-	glfwSetKeyCallback(s_glWindow, func);
+	glfwSetKeyCallback(GLDevice::GetGLWindow(), func);
 }
 
 void GLContext::setCursorHandler(GLFWcursorposfun func) {
-	assert(s_glWindow != nullptr);
-	glfwSetCursorPosCallback(s_glWindow, func);
+	glfwSetCursorPosCallback(GLDevice::GetGLWindow(), func);
 }
 
 void GLContext::setCursorPos(double xpos, double ypos) {
-	assert(s_glWindow != nullptr);
-	glfwSetCursorPos(s_glWindow, xpos, ypos);
+	glfwSetCursorPos(GLDevice::GetGLWindow(), xpos, ypos);
 }
 
 void GLContext::getCursorPos(double& xpos, double& ypos) {
-	assert(s_glWindow != nullptr);
-	glfwGetCursorPos(s_glWindow, &xpos, &ypos);
+	glfwGetCursorPos(GLDevice::GetGLWindow(), &xpos, &ypos);
 }
 
-int GLContext::getKeyState(int key) {
-	assert(s_glWindow != nullptr);
-	return glfwGetKey(s_glWindow, key);
-}
-
-void GLContext::setFaceCulling(bool enabled, bool is_back) {
-	if (enabled) {
-		glEnable(GL_CULL_FACE);
-		glCullFace(is_back ? GL_BACK : GL_FRONT);
-	}
-	else {
-		glDisable(GL_CULL_FACE);
-	}
+CommonKeyState GLContext::getKeyState(CommonKeyCode key) {
+	uint gl_key_code = glKeyCodeMap[key];
+	uint gl_key_state = glfwGetKey(GLDevice::GetGLWindow(), gl_key_code);
+	return glKeyStateMap[gl_key_state];
 }

@@ -22,3 +22,6 @@ gpu粒子特效，compute shader的gpu 编程。
 后处理，屏幕空间算法、射线检测、ray marching、体积光、ssao等。
 简单几何物体场景的raying tracing。
 
+2022.8.13
+构建RHI抽象层，分离opengl设备到底层，并增加dx12层，尝试实现用相同流程走dx12设备进行渲染。
+

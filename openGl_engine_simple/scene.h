@@ -19,6 +19,7 @@ namespace simple_engine {
 		bool removeGameObjectByName(std::string name);
 		const std::vector<GameObject*>& getGameObjects();
 		Camera* getMainCamera() { return mainCamera; };
+		const std::vector<GameObject*>& getSkyBoxs();
 		const std::vector<BaseLight*>& getLights() { return m_lights; }
 		void setMainCamera(Camera* camera) { mainCamera = camera; }
 		std::string getName();
@@ -34,7 +35,7 @@ namespace simple_engine {
 		Camera* mainCamera;
 		std::string m_name;
 		std::vector<GameObject*> m_gameObjects;
-		GameObject* m_skybox;
+		std::vector<GameObject*> m_skyboxs;
 		std::vector<BaseLight*> m_lights;
 	};
 }

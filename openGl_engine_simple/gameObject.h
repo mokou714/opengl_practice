@@ -3,7 +3,7 @@
 #include <vector>
 #include "mesh.h"
 #include "material.h"
-#include "glContext.h"
+#include "PipelineStateObject.h"
 
 namespace simple_engine {
 	/*
@@ -32,6 +32,7 @@ namespace simple_engine {
 		glm::vec4 getRight(); //local x 方向
 		glm::vec4 getUp(); //local y 方向
 		Material& getMaterial() { return m_material; }
+		PipelineStateObject getPipelineState() { return m_pipeline_state; }
 
 		void setPositionX(float x) { m_position.x = x; }
 		void setPositionY(float y) { m_position.y = y; }
@@ -39,12 +40,17 @@ namespace simple_engine {
 		void setPosition(glm::vec3 pos) { m_position = pos; }
 		void setScale(float scale) { m_scale = scale; }
 		void setRotation(glm::quat rotation) { m_rotation = rotation; }
+		void setRotationX(float angle);
+		void setRotationY(float angle);
+		void setRotationZ(float angle);
 		void setMaterial(Material mat) { m_material = mat; }
+		void setPipelineState(PipelineStateObject state) { m_pipeline_state = state; }
 
 	protected:
 		std::string m_name;
 		std::vector<Mesh> m_meshes;
 		Material m_material;	// todo 每个mesh对应一种material
+		PipelineStateObject m_pipeline_state;
 		glm::vec3 m_position;
 		glm::quat m_rotation; // x:pitch y:yaw z:roll
 		float m_scale;

@@ -7,12 +7,13 @@
 using namespace simple_engine;
 
 int main() {
-	if (!Engine::Instance()->init()) {
+	if (!Engine::Instance()->Initialize()) {
 		return 0;
 	}
 
 	Camera* mainCam =CameraManager::Instance()->createCameraByDefault("mainCam");
-	Scene* mainScene = SceneManager::Instance()->createAndAddScene("mainScene", mainCam, TemplateScene::FirstSampleScene);
+	//Scene* mainScene = SceneManager::Instance()->createAndAddScene("mainScene", mainCam, TemplateScene::FirstSampleScene);
+	Scene* mainScene = SceneManager::Instance()->createAndAddScene("mainScene", mainCam, TemplateScene::GraphicHW1);
 
 	if(mainScene){
 		SceneManager::Instance()->setCurrentScene(mainScene);
@@ -24,15 +25,14 @@ int main() {
 	}
 	
 	//主循环
-	Engine::Instance()->run();
+	Engine::Instance()->Run();
 	
-
 	//主循环退出后清除资源
 	SceneManager::Instance()->removeScene("mainScene");
 	CameraManager::Instance()->removeCamera("mainCam");
-	SceneManager::Instance()->destroy();
-	CameraManager::Instance()->destroy();
-	Engine::Instance()->destroy();
+	SceneManager::Instance()->Destroy();
+	CameraManager::Instance()->Destroy();
+	Engine::Instance()->Destroy();
 
 	return 0;
 }
