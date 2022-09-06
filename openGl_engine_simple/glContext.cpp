@@ -119,6 +119,7 @@ void GLContext::SetMaterial(Material& mat)
 		}
 		glUniformMatrix4fv(program_info_map[name], 1, GL_FALSE, &pair.second[0][0]);
 	}
+
 	for (auto& pair : mat.getUniforms4f()) {
 		std::string name = pair.first;
 		if (!program_info_map.count(name)) {
@@ -126,6 +127,16 @@ void GLContext::SetMaterial(Material& mat)
 		}
 		glUniform4f(program_info_map[name], pair.second.x, pair.second.y, pair.second.z, pair.second.w);
 	}
+
+	for (auto& pair : mat.getUniforms4fv())
+	{
+		std::string name = pair.first;
+		if (!program_info_map.count(name)) {
+			program_info_map[name] = glGetUniformLocation(program_id, pair.first.c_str());
+		}
+		glUniform4fv(program_info_map[name], pair.second.size(), &pair.second[0][0]);
+	}
+
 	for (auto& pair : mat.getUniforms3f()) {
 		std::string name = pair.first;
 		if (!program_info_map.count(name)) {
@@ -133,6 +144,15 @@ void GLContext::SetMaterial(Material& mat)
 		}
 		glUniform3f(program_info_map[name], pair.second.x, pair.second.y, pair.second.z);
 	}
+
+	for (auto& pair : mat.getUniforms3fv()) {
+		std::string name = pair.first;
+		if (!program_info_map.count(name)) {
+			program_info_map[name] = glGetUniformLocation(program_id, pair.first.c_str());
+		}
+		glUniform3fv(program_info_map[name], pair.second.size(), &pair.second[0][0]);
+	}
+
 	for (auto& pair : mat.getUniforms2f()) {
 		std::string name = pair.first;
 		if (!program_info_map.count(name)) {
@@ -146,6 +166,13 @@ void GLContext::SetMaterial(Material& mat)
 			program_info_map[name] = glGetUniformLocation(program_id, pair.first.c_str());
 		}
 		glUniform1f(program_info_map[name], pair.second);
+	}
+	for (auto& pair : mat.getUniforms1fv()) {
+		std::string name = pair.first;
+		if (!program_info_map.count(name)) {
+			program_info_map[name] = glGetUniformLocation(program_id, pair.first.c_str());
+		}
+		glUniform1fv(program_info_map[name], pair.second.size(), &pair.second[0]);
 	}
 
 	//创建并绑定纹理

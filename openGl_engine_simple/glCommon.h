@@ -41,7 +41,9 @@ namespace simple_engine
 		{CommonKeyCode::RIGHT_ARROW,	GLFW_KEY_RIGHT},
 		{CommonKeyCode::UP_ARROW,		GLFW_KEY_UP},
 		{CommonKeyCode::DOWN_ARROW,		GLFW_KEY_DOWN},
-	};
+		{CommonKeyCode::LEFT_SHIFT,		GLFW_KEY_LEFT_SHIFT},
+
+};
 
 	static std::unordered_map<int, CommonKeyState> glKeyStateMap = {
 		{-1,			CommonKeyState::NONE},

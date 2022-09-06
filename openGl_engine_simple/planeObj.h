@@ -1,5 +1,6 @@
 #pragma once
 #include "gameObject.h"
+#include "plane.h"
 
 namespace simple_engine {
 	class PlaneObj: public GameObject

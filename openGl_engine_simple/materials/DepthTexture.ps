@@ -1,0 +1,123 @@
+#version 330 core
+
+uniform vec3 base_color;
+uniform vec3 cam_pos;
+uniform float texture_world_size;
+
+in vec2 v_uv;
+in vec3 v_vertex;
+in vec3 v_model_center_pos;
+
+//uniform sampler2D interior_tex0;
+
+out vec4 color;
+
+bool is_equal(vec3 a, vec3 b)
+{
+    return length(a-b) < 0.001;
+}
+
+void main() {
+    float u = v_uv.x;
+    float v = v_uv.y;
+    color = vec4(0.0, 0.0, 0.0, 1.0);
+    //color = texture(interior_tex0, vec2(u,v));
+
+    vec3 colors[16] = vec3[16](
+        vec3(199/255.0, 20/255.0, 20/255.0), 
+        vec3(222/255.0, 135/255.0, 13/255.0),
+        vec3(237/255.0, 230/255.0, 21/255.0),
+        vec3(115/255.0, 237/255.0, 21/255.0),
+        vec3(21/255.0, 237/255.0, 215/255.0),
+        vec3(21/255.0, 143/255.0, 237/255.0),
+        vec3(25/255.0, 21/255.0, 237/255.0),
+        vec3(179/255.0, 21/255.0, 237/255.0),
+        vec3(237/255.0, 21/255.0, 154/255.0),
+        vec3(247/255.0, 148/255.0, 218/255.0),
+        vec3(235/255.0, 245/255.0, 100/255.0),
+        vec3(62/255.0, 67/255.0, 222/255.0),
+        vec3(2/255.0, 201/255.0, 172/255.0),
+        vec3(255/255.0, 240/255.0, 217/255.0),
+        vec3(218/255.0, 217/255.0, 255/255.0),
+        vec3(245/255.0, 194/255.0, 149/255.0)
+        );
+
+    float circle_radius = 0.017;
+
+    vec3 view_dir = normalize(cam_pos-v_model_center_pos);
+    vec3 up_dir = vec3(0.0, 1.0, 0.0);
+
+    //绕u的旋转角度
+    vec3 view_dir_u = view_dir;
+    view_dir_u.x = 0.0;
+    view_dir_u = normalize(view_dir_u);
+    float sign_u;
+    if( is_equal(normalize(cross(view_dir_u, up_dir)), vec3(1.0, 0.0, 0.0)))
+    {
+        sign_u = -1.0;
+    }
+    else{
+        sign_u = 1.0;
+    }
+    
+    //绕v的旋转角度
+    vec3 view_dir_v = view_dir;
+    view_dir_v.z = 0.0;
+    view_dir_v = normalize(view_dir_v);
+    float sign_v = -1;
+    if( is_equal(normalize(cross(view_dir_v, up_dir)), vec3(0.0, 0.0, -1.0)))
+    {
+        sign_v = -1.0;
+    }
+    else{
+        sign_v = 1.0;
+    }
+    
+    int main_circle_count = 4;
+    int sub_circle_count = 5;
+    for(int i=0; i<main_circle_count; ++i)
+    {   
+        for (int j=0; j<main_circle_count; ++j)
+        {
+            vec2 center = vec2((i+0.5)/main_circle_count, (j+0.5)/main_circle_count); 
+            float d_u = abs(center.x - u);
+            float d_v = abs(center.y - v);
+
+            //主圆
+            if(d_u*d_u + d_v*d_v <= circle_radius*circle_radius)
+            {
+                color = vec4(colors[i*main_circle_count+j], 1.0);
+            }
+            //副圆
+            else
+            {   
+                for(int k=1; k<sub_circle_count+1; ++k)
+                {   
+                    float depth_step = 3.8*k;   // 世界坐标系Y的深度
+                    float _circle_radius = circle_radius - 0.002 * k;
+
+                    vec3 depth_point = v_model_center_pos;
+                    depth_point.y -= depth_step;
+
+                    float u_offset = (cam_pos.x - v_model_center_pos.x) * depth_step / (cam_pos.y - depth_point.y) / texture_world_size;
+                    float v_offset = (cam_pos.z - v_model_center_pos.z) * depth_step / (cam_pos.y - depth_point.y) / texture_world_size;
+                    
+
+                    //绕v轴的角度越大，u的偏移得更大。绕u轴同理。(数学上错误，但看起来还行)
+                    // float center_u_offset = (1.0-dot(view_dir_v, up_dir))  * sign_v * step;
+                    // float center_v_offset = (1.0-dot(view_dir_u, up_dir))  * sign_u * step;
+                    // vec2 center = circle_centers[i] + vec2(center_u_offset, center_v_offset);
+
+                    d_u = abs(center.x + u_offset - u);
+                    d_v = abs(center.y + v_offset - v);
+                    if(d_u*d_u + d_v*d_v <= _circle_radius*_circle_radius)
+                    {
+                        color = vec4(colors[i*main_circle_count+j]-j*0.15, 1.0);
+                        //color = vec4(u_offset, v_offset, 0.0, 1.0);
+                    }
+                }
+            }
+        }
+        
+    }
+}

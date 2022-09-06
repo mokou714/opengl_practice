@@ -39,6 +39,7 @@ InputManager::InputManager():
 		{CommonKeyCode::RIGHT_ARROW,	CommonKeyState::NONE},
 		{CommonKeyCode::UP_ARROW,		CommonKeyState::NONE},
 		{CommonKeyCode::DOWN_ARROW,		CommonKeyState::NONE},
+		{CommonKeyCode::LEFT_SHIFT,		CommonKeyState::NONE},
 	},
 	m_mouseX(SE_WINDOW_WIDTH / 2.0), m_mouseY(SE_WINDOW_HEIGHT / 2.0), m_deltaMouseX(0), m_deltaMouseY(0)
 {

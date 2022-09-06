@@ -6,6 +6,7 @@ namespace simple_engine {
 	{
 	public:
 		Cube();
+		float getSideSize();
 	};
 }
 

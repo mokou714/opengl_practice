@@ -175,6 +175,18 @@
     <ClCompile Include="Display.cpp">
       <Filter>device</Filter>
     </ClCompile>
+    <ClCompile Include="textureWithDepthScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="depthTextureMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="interiorMappingMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="displacementTexMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
@@ -314,6 +326,18 @@
     </ClInclude>
     <ClInclude Include="Display.h">
       <Filter>device</Filter>
+    </ClInclude>
+    <ClInclude Include="textureWithDepthScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="depthTextureMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="interiorMappingMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="displacementTexMat.h">
+      <Filter>material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -162,10 +162,10 @@ glm::vec4 GameObject::getUp() {
 	return glm::normalize(glm::toMat4(m_rotation) * glm::vec4(0.0, 1.0, 0.0, 0.0));
 }
 
-void GameObject::setRotationX(float angle)
+void GameObject::setRotationX(float radian)
 {
 	glm::vec3 euler_angles = glm::eulerAngles(m_rotation);
-	euler_angles.x = angle;
+	euler_angles.x = radian;
 	m_rotation = glm::quat(euler_angles);
 }
 

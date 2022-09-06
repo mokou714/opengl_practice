@@ -31,6 +31,7 @@ namespace simple_engine {
 		glm::vec4 getForward();	//local -z 方向
 		glm::vec4 getRight(); //local x 方向
 		glm::vec4 getUp(); //local y 方向
+		const Mesh& getSubMesh(int index) { return m_meshes[index]; }
 		Material& getMaterial() { return m_material; }
 		PipelineStateObject getPipelineState() { return m_pipeline_state; }
 

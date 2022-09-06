@@ -305,7 +305,7 @@ struct BufferDesc
 enum class CommonKeyCode {
 	A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
 	ESCAPE,LEFT_MOUSE, RIGHT_MOUSE, MIDDLE_MOUSE, LEFT_ARROW,
-	RIGHT_ARROW, UP_ARROW, DOWN_ARROW,
+	RIGHT_ARROW, UP_ARROW, DOWN_ARROW, LEFT_SHIFT,
 };
 
 enum class CommonKeyState

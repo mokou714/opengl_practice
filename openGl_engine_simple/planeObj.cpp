@@ -1,5 +1,4 @@
 #include "planeObj.h"
-#include "plane.h"
 #include "baseColorMat.h"
 
 using namespace simple_engine;

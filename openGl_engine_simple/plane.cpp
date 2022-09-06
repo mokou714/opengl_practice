@@ -18,4 +18,15 @@ Plane::Plane(): Mesh() {
 		0, 1, 3, 0, 3, 2
 	};
 
+	m_coords = {
+		glm::vec2{0.0, 0.0},
+		glm::vec2{0.0, 1.0},
+		glm::vec2{1.0, 0.0},
+		glm::vec2{1.0, 1.0},
+	};
+}
+
+float Plane::getSideSize()
+{
+	return 2.0;
 }

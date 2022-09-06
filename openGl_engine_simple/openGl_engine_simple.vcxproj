@@ -153,6 +153,8 @@
     <ClInclude Include="cameraManager.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="cubeObj.h" />
+    <ClInclude Include="depthTextureMat.h" />
+    <ClInclude Include="displacementTexMat.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="dx12Context.h" />
     <ClInclude Include="dx12Device.h" />
@@ -162,6 +164,7 @@
     <ClInclude Include="glDevice.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GpuBuffer.h" />
+    <ClInclude Include="interiorMappingMat.h" />
     <ClInclude Include="PipelineStateObject.h" />
     <ClInclude Include="ITexture.h" />
     <ClInclude Include="IRenderDevice.h" />
@@ -191,6 +194,7 @@
     <ClInclude Include="sphereObj.h" />
     <ClInclude Include="suzanne.h" />
     <ClInclude Include="suzanneObj.h" />
+    <ClInclude Include="textureWithDepthScene.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +205,8 @@
     <ClCompile Include="cameraManager.cpp" />
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="cubeObj.cpp" />
+    <ClCompile Include="depthTextureMat.cpp" />
+    <ClCompile Include="displacementTexMat.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="dx12Context.cpp" />
     <ClCompile Include="dx12Device.cpp" />
@@ -208,6 +214,7 @@
     <ClCompile Include="glDevice.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GpuBuffer.cpp" />
+    <ClCompile Include="interiorMappingMat.cpp" />
     <ClCompile Include="PipelineStateObject.cpp" />
     <ClCompile Include="IRenderContext.cpp" />
     <ClCompile Include="IRenderDevice.cpp" />
@@ -237,6 +244,7 @@
     <ClCompile Include="sphereObj.cpp" />
     <ClCompile Include="suzanne.cpp" />
     <ClCompile Include="suzanneObj.cpp" />
+    <ClCompile Include="textureWithDepthScene.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>

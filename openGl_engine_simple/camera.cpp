@@ -21,6 +21,8 @@ void Camera::Update()
 	auto a_state = input_manager->getKeyState(CommonKeyCode::A);
 	auto s_state = input_manager->getKeyState(CommonKeyCode::S);
 	auto d_state = input_manager->getKeyState(CommonKeyCode::D);
+	auto shift_state = input_manager->getKeyState(CommonKeyCode::LEFT_SHIFT);
+	auto speed_scale = (shift_state == CommonKeyState::PRESSED || shift_state == CommonKeyState::REPEATED) ? 1.0f : 0.5f;
 
 	glm::vec3 delta_forward;
 	glm::vec3 delta_right;
@@ -30,19 +32,19 @@ void Camera::Update()
 
 	if (w_state == CommonKeyState::PRESSED || w_state == CommonKeyState::REPEATED)
 	{
-		delta_forward = forward * 0.1f;
+		delta_forward = forward * speed_scale;
 	}
 	if (s_state == CommonKeyState::PRESSED || s_state == CommonKeyState::REPEATED)
 	{
-		delta_forward = -forward * 0.1f;
+		delta_forward = -forward * speed_scale;
 	}
 	if (a_state == CommonKeyState::PRESSED || a_state == CommonKeyState::REPEATED)
 	{
-		delta_right = -right * 0.1f;
+		delta_right = -right * speed_scale;
 	}
 	if (d_state == CommonKeyState::PRESSED || d_state == CommonKeyState::REPEATED)
 	{
-		delta_right = right * 0.1f;
+		delta_right = right * speed_scale;
 	}
 	m_inputDeltaTranslation += glm::vec3(delta_forward)  + glm::vec3(delta_right);
 

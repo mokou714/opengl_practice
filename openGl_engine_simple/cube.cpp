@@ -40,3 +40,8 @@ Cube::Cube() : Mesh() {
 		0, 6, 2,
 	};
 }
+
+float Cube::getSideSize()
+{
+	return 2.0f;
+}

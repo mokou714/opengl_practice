@@ -1,6 +1,7 @@
 #include "sceneManager.h"
 #include "firstScene.h"
 #include "magicDoorScene.h"
+#include "textureWithDepthScene.h"
 
 using namespace simple_engine;
 
@@ -37,6 +38,9 @@ Scene* SceneManager::createAndAddScene(std::string name, Camera* camera, Templat
 		break;
 	case TemplateScene::GraphicHW1:
 		newScene = new MagicDoorScene(name, camera);
+		break;
+	case TemplateScene::GraphicHW3:
+		newScene = new TextureWithDepthScene(name, camera);
 		break;
 	default:
 		newScene = new Scene(name, camera);

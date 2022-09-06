@@ -1,5 +1,4 @@
 #include "cubeObj.h"
-#include "cube.h"
 #include "baseColorMat.h"
 
 using namespace simple_engine;

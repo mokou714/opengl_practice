@@ -9,6 +9,7 @@ namespace simple_engine {
 		None = 0,
 		FirstSampleScene,
 		GraphicHW1,
+		GraphicHW3,
 	};
 
 

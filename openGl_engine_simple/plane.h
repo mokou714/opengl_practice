@@ -6,5 +6,6 @@ namespace simple_engine {
 
 	public:
 		Plane();
+		float getSideSize();
 	};
 }

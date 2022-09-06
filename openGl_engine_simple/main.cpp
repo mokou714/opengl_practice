@@ -13,7 +13,7 @@ int main() {
 
 	Camera* mainCam =CameraManager::Instance()->createCameraByDefault("mainCam");
 	//Scene* mainScene = SceneManager::Instance()->createAndAddScene("mainScene", mainCam, TemplateScene::FirstSampleScene);
-	Scene* mainScene = SceneManager::Instance()->createAndAddScene("mainScene", mainCam, TemplateScene::GraphicHW1);
+	Scene* mainScene = SceneManager::Instance()->createAndAddScene("mainScene", mainCam, TemplateScene::GraphicHW3);
 
 	if(mainScene){
 		SceneManager::Instance()->setCurrentScene(mainScene);
