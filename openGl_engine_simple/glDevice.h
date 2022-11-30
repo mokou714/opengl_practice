@@ -14,8 +14,14 @@ namespace simple_engine
 		void Destroy() override;
 		bool Initialize() override;
 		void CreateTexture(TextureDesc desc, TextureData data, ITexture& tex_out) override;
+		RUID CreateTexture(const char* file_path) override;
+		RUID CreateCubemapTexture(std::vector<const char*> files) override;
+		void DeleteTexture(RUID tex_id) override;
 		unsigned int CreateBuffer() override;
 		void DeleteBuffer(unsigned int buffer_id) override;
+		
+		void OutputTextureToFile(RUID texture, int width, int height);
+
 		static GLFWwindow* GetGLWindow() { return s_glWindow;}
 	private:
 		static GLDevice* s_glDevice;

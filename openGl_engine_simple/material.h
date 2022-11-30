@@ -2,8 +2,10 @@
 #include "deviceCommon.h"
 #include <vector>
 #include <unordered_map>
+#include "PipelineStateObject.h"
+#include "ITexture.h"
 
-#define RUID unsigned int
+
 
 namespace simple_engine{
 
@@ -15,6 +17,11 @@ namespace simple_engine{
 		WV,
 		CAMERA_POSITION,
 		LIGHT_DIR,
+	};
+
+	enum class TEXTURE_MAP_TYPE {
+		DEFAUT,
+		CUBEMAP,
 	};
 
 
@@ -31,12 +38,10 @@ namespace simple_engine{
 		void setUniform1f(const char* name, float data) { m_uniforms1f[name] = data; }
 		void setUniform1fv(const char* name, std::vector<float> data) { m_uniforms1fv[name] = data; }
 		void setShaderProgram(RUID program_id) { m_glShaderProgram = program_id; }
-		void addGLTexture(std::string uniform_name, RUID tex_id) { m_glTextures[uniform_name] = tex_id; }
+		void setPipelineState(PipelineStateObject state) { m_pipeline_state = state; }
+		void addOtherTexture(const char* name, RUID resource_id) { m_other_texture_resources[name] = resource_id; }
 
 		RUID getShaderProgram() { return m_glShaderProgram; }
-		const std::unordered_map<std::string, RUID>& getGLTextures() { return m_glTextures;}
-		const std::unordered_map<std::string, const char*>& getTextureResources() { return m_textures; }
-		const std::unordered_map<std::string, std::vector<const char*>>& getCubemapTextureResources() { return m_cubemapTextures; }
 		const std::string& getVSFile() { return m_vertex_shader; }
 		const std::string& getPSFile() { return m_pixel_shader; }
 		const std::unordered_map<std::string, glm::mat4>& getUniformsMat4() { return m_uniformsMat4; }
@@ -48,11 +53,18 @@ namespace simple_engine{
 		const std::unordered_map<std::string, float>& getUniforms1f() { return m_uniforms1f; }
 		const std::unordered_map<std::string, std::vector<float>>& getUniforms1fv() { return m_uniforms1fv; }
 		const std::unordered_map<std::string, SHADER_SEMANTICS>& getSemanticsMap() { return m_semanticsMap; }
+		PipelineStateObject& getPipelineState() { return m_pipeline_state; }
+		std::unordered_map<std::string, ITexture*>& getTextures() { return m_textures; }
+		std::unordered_map<std::string, ITexture*>& getCubemapTextures() { return m_cubemapTextures; }
+		std::unordered_map<std::string, RUID>& getOtherTextures() { return m_other_texture_resources; }
 		
 		void setShaderFiles(std::string vs, std::string ps) { m_vertex_shader = vs; m_pixel_shader = ps; }
 		void setTextureFile(const char* uniform_name, const char* file);
 		void setCubemapTextureFiles(const char* uniform_name, const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back);
 		void setCubemapTextureFiles(const char* uniform_name, std::vector<const char*> texture_files);
+
+		// Material的texture资源不跟随object的生命周期 由外部手动调用销毁
+		void releaseAllTextures();
 
 	protected:
 		//uniform name, data
@@ -63,18 +75,21 @@ namespace simple_engine{
 		std::unordered_map<std::string, glm::vec2> m_uniforms2f;
 		std::unordered_map<std::string, float> m_uniforms1f;
 		std::unordered_map<std::string, glm::mat4> m_uniformsMat4;
-		std::unordered_map<std::string, const char*> m_textures;	//uniform名 -> 文件路径
 		std::unordered_map<std::string, std::vector<float>> m_uniforms1fv;
-		std::unordered_map<std::string, std::vector<const char*>> m_cubemapTextures;	// right left top bottom back front的顺序 和gl枚举定义顺序一致
+
+		std::unordered_map<std::string, ITexture*> m_textures;
+		std::unordered_map<std::string, ITexture*> m_cubemapTextures;
+		std::unordered_map<std::string, RUID> m_other_texture_resources;	// todo 其他来源的GPU Texture也用ITexture封装 并且用引用计数管理
+
 		std::string m_vertex_shader;
 		std::string m_pixel_shader;
-		
+		PipelineStateObject m_pipeline_state;
+
 		//uniform name -> semantic
 		std::unordered_map<std::string, SHADER_SEMANTICS> m_semanticsMap;
 
 		//todo gl设备层的数据是否要放在这？
 		RUID m_glShaderProgram;
-		std::unordered_map<std::string, RUID> m_glTextures;
 
 	};
 

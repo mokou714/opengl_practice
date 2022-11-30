@@ -1,0 +1,154 @@
+#version 330 core
+
+uniform sampler2D position_rt;
+uniform sampler2D albedo_rt;
+uniform sampler2D normal_rt;
+uniform sampler2D depth_rt;
+
+in vec2 v_uv;
+out vec4 color;
+
+uniform vec3 cam_pos;
+
+vec2 getDirectionLightIntensity(vec3 light_dir, vec4 w_pos, vec4 w_normal)
+{
+    float k_d = 0.2;
+    float k_s = 0.7;
+    float diffuse_intensity;
+    float specular_intensity;
+    vec3 view_dir = normalize(cam_pos-w_pos.xyz);
+    
+    diffuse_intensity = k_d * max(0, dot(light_dir, w_normal.xyz));
+    specular_intensity = k_s * pow( max(dot(reflect(light_dir, w_normal.xyz), view_dir), 0), 2.0);
+    return vec2(diffuse_intensity, specular_intensity);
+}
+
+vec2 getPointLightIntensity(vec3 light_pos, vec4 w_pos, vec4 w_normal)
+{
+    float k_d = 0.2;
+    float k_s = 0.3;
+    float diffuse_intensity;
+    float specular_intensity;
+    vec3 view_dir = normalize(cam_pos-w_pos.xyz);
+    float light_distance = length(light_pos - w_pos.xyz);
+    float distance_threshold = 25.0;
+    vec3 light_dir = normalize(light_pos - w_pos.xyz);
+
+    float t_c = 0.0;        //常数衰减
+    float t_l = 0.0;        //线性衰减
+    float t_q = 0.0025;     //平方衰减
+    float tenuity;
+    if (light_distance > distance_threshold)
+    {
+        tenuity = 0.0;
+    }
+    else
+    { 
+        tenuity = 1.0 / (t_c + t_l * light_distance + t_q * light_distance * light_distance);
+    }
+    diffuse_intensity = k_d * max(0, dot(light_dir, w_normal.xyz)) * tenuity;
+    specular_intensity = k_s * pow(max(dot(reflect(light_dir, w_normal.xyz), view_dir), 0), 2.0) * tenuity;
+    return vec2(diffuse_intensity, specular_intensity);
+}
+
+vec2 getSpotLightIntensity(vec3 light_pos, vec3 aim_dir, vec4 w_pos, vec4 w_normal)
+{
+    float k_d = 0.3;
+    float k_s = 0.4;
+    float diffuse_intensity;
+    float specular_intensity;
+    vec3 view_dir = normalize(cam_pos-w_pos.xyz);
+    float light_distance = length(light_pos - w_pos.xyz);
+    float distance_threshold = 800.0f;
+    vec3 light_dir = normalize(light_pos - w_pos.xyz);
+    float angle_threshold = cos(radians(15.0f));
+
+    float t_c = 0.0;        //常数衰减
+    float t_l = 0.0;        //线性衰减
+    float t_q = 0.00001;     //平方衰减
+    float tenuity;
+    if (light_distance > distance_threshold || dot(light_dir, aim_dir) < angle_threshold)
+    {
+        tenuity = 0.0;
+    }
+    else
+    { 
+        tenuity = pow(max(0, dot(light_dir, aim_dir)), 2.0) / (t_c + t_l * light_distance+t_q * light_distance*light_distance);
+    }
+    diffuse_intensity = k_d * max(0, dot(light_dir, w_normal.xyz)) * tenuity;
+    specular_intensity = k_s * pow( max(dot(reflect(light_dir, w_normal.xyz), view_dir), 0), 2.0) * tenuity;
+    return vec2(diffuse_intensity, specular_intensity);
+}
+
+void main() {
+    vec4 albedo = texture(albedo_rt, v_uv);
+    vec4 w_position = texture(position_rt, v_uv);
+    vec4 w_normal = texture(normal_rt, v_uv);
+    float depth = texture(depth_rt, v_uv).r;
+    float ambient_intensity = 0.7;
+
+    vec2 total_light_intensity = vec2(0.0);
+    vec3 total_light_color = vec3(1.0);
+
+    vec3 spotlight_1 = vec3(-75.0, 450.0, -75.0);
+    vec3 spotlight_1_dir = vec3(0.0, 1.0, 0.0);
+    vec3 spotlight_2 = vec3(-20.0, 450.0, -55.0);
+    vec3 spotlight_2_dir = vec3(0.0, 1.0, 0.0);
+    vec3 dir_light_1 = normalize(vec3(1.0, 2.0, 1.0)); 
+
+    //点光群
+    vec3 colors[16] = vec3[16](
+        vec3(199/255.0, 20/255.0, 20/255.0), 
+        vec3(222/255.0, 135/255.0, 13/255.0),
+        vec3(237/255.0, 230/255.0, 21/255.0),
+        vec3(115/255.0, 237/255.0, 21/255.0),
+        vec3(21/255.0, 237/255.0, 215/255.0),
+        vec3(21/255.0, 143/255.0, 237/255.0),
+        vec3(25/255.0, 21/255.0, 237/255.0),
+        vec3(179/255.0, 21/255.0, 237/255.0),
+        vec3(237/255.0, 21/255.0, 154/255.0),
+        vec3(247/255.0, 148/255.0, 218/255.0),
+        vec3(235/255.0, 245/255.0, 100/255.0),
+        vec3(62/255.0, 67/255.0, 222/255.0),
+        vec3(2/255.0, 201/255.0, 172/255.0),
+        vec3(255/255.0, 240/255.0, 217/255.0),
+        vec3(218/255.0, 217/255.0, 255/255.0),
+        vec3(245/255.0, 194/255.0, 149/255.0)
+    );
+    
+    vec3 point_lights[10] = vec3[10]( 
+        vec3(-100.0, 30.0, 120.0),
+        vec3(-85.0, 30.0, 95.0),
+        vec3(-70.0, 30.0, 126.0),
+        vec3(-55.0, 30.0, 76.0),
+        vec3(-10.0, 30.0, 105.0),
+        vec3(-35.0, 30.0, 23.0),
+        vec3(-10.0, 30.0, 126.0),
+        vec3(-5.0, 30.0, 35.0),
+        vec3(-100.0, 30.0, 40.0),
+        vec3(-20.0, 30.0, 70.0)
+    );
+    
+    for (int i=0; i<10; ++i)
+    {   
+        vec2 intensity = getPointLightIntensity(point_lights[i], w_position, w_normal);
+        if (length(intensity) > 0.0)
+        {
+            total_light_intensity += intensity;
+            total_light_color += colors[i];
+        }
+    }
+
+
+    // 平行光
+    vec2 dir_light_intensity = getDirectionLightIntensity(dir_light_1, w_position, w_normal);
+    // 聚光
+    vec2 spotlight_1_intensity = getSpotLightIntensity(spotlight_1, spotlight_1_dir, w_position, w_normal);
+    vec2 spotlight_2_intensity = getSpotLightIntensity(spotlight_2, spotlight_2_dir, w_position, w_normal);
+
+    total_light_intensity += dir_light_intensity + spotlight_1_intensity + spotlight_2_intensity;
+    total_light_color = normalize(total_light_color);
+
+    vec3 final_color = albedo.xyz * ambient_intensity + total_light_color * (total_light_intensity.x + total_light_intensity.y);
+    color = vec4(final_color, 1.0);
+}

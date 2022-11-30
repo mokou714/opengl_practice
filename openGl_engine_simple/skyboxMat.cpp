@@ -37,12 +37,23 @@ const std::unordered_map<SKYBOX_TYPE, std::vector<const char*>> SkyboxMat::type_
 			"textures/cubemap/polluted_earth/polluted_earth_bk.jpg",
 			"textures/cubemap/polluted_earth/polluted_earth_ft.jpg",
 		}
+	},
+	{
+		SKYBOX_TYPE::HDR_1,
+		{
+			"textures/cubemap/hdr/px.hdr",
+			"textures/cubemap/hdr/nx.hdr",
+			"textures/cubemap/hdr/py.hdr",
+			"textures/cubemap/hdr/ny.hdr",
+			"textures/cubemap/hdr/pz.hdr",
+			"textures/cubemap/hdr/nz.hdr",
+		}
 	}
 };
 
 SkyboxMat::SkyboxMat(SKYBOX_TYPE type): m_type(type) {
 	m_vertex_shader = "materials/Skybox.vs";
 	m_pixel_shader = "materials/Skybox.ps";
-	m_cubemapTextures["skyCubemap"] = SkyboxMat::type_resources_map.at(type);
+	m_cubemapTextures["skyCubemap"] = new ITexture(SkyboxMat::type_resources_map.at(type));
 	m_semanticsMap["wvp"] = SHADER_SEMANTICS::WVP;
 }

@@ -35,7 +35,7 @@ bool MagicDoorScene::init()
 	pipeline_state.stencil_func = DepthStencilOption::FUNC_ALWAYS;
 	pipeline_state.stencil_op_passed = DepthStencilOption::OP_STENCIL_REPLACE;
 	pipeline_state.culling_enable = false;
-	m_stencil_door->setPipelineState(pipeline_state);
+	m_stencil_door->getMaterial().setPipelineState(pipeline_state);
 	
 	//天空盒通过测试不改变模版值
 	pipeline_state.stencil_op_passed = DepthStencilOption::OP_STENCIL_KEEP;
@@ -49,21 +49,21 @@ bool MagicDoorScene::init()
 	//天空盒1 模版函数用not equal 在模版区域以外的地方绘制
 	pipeline_state.stencil_func = DepthStencilOption::FUNC_NOT_EQUAL;
 	pipeline_state.depth_test_enable = false;
-	skybox_1->setPipelineState(pipeline_state);
+	skybox_1->getMaterial().setPipelineState(pipeline_state);
 	
 	//天空盒2 模版函数用equal 在模版区域内绘制
 	//因为两个天空盒重叠 天空盒2的深度对比函数用gl_always 避免像素通过了模版测试但未通过深度测试被丢弃
 	pipeline_state.stencil_func = DepthStencilOption::FUNC_EQUAL;
 	pipeline_state.depth_test_enable = false;
-	skybox_2->setPipelineState(pipeline_state);
+	skybox_2->getMaterial().setPipelineState(pipeline_state);
 
 	GameObject* box = new CubeObj("box");
 	m_gameObjects.push_back(box);
-	PipelineStateObject box_state = box->getPipelineState();
+	PipelineStateObject box_state = box->getMaterial().getPipelineState();
 	box_state.depth_func = DepthStencilOption::FUNC_GREATER;
 	box_state.stencil_test_enable = true;
 	box_state.stencil_func = DepthStencilOption::FUNC_EQUAL;
-	box->setPipelineState(box_state);
+	box->getMaterial().setPipelineState(box_state);
 
 	return true;
 }
@@ -132,9 +132,9 @@ void MagicDoorScene::updatePipeline()
 	auto skybox_1 = m_skyboxs[0];
 	auto skybox_2 = m_skyboxs[1];
 
-	PipelineStateObject state = skybox_1->getPipelineState();
+	PipelineStateObject state = skybox_1->getMaterial().getPipelineState();
 	state.stencil_func = world_type == 0 ? DepthStencilOption::FUNC_NOT_EQUAL : DepthStencilOption::FUNC_EQUAL;
-	skybox_1->setPipelineState(state);
+	skybox_1->getMaterial().setPipelineState(state);
 	state.stencil_func = world_type == 1 ? DepthStencilOption::FUNC_NOT_EQUAL : DepthStencilOption::FUNC_EQUAL;
-	skybox_2->setPipelineState(state);
+	skybox_2->getMaterial().setPipelineState(state);
 }

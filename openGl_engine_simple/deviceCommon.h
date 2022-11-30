@@ -23,10 +23,19 @@ using namespace glm;
 #define SE_DEBUG_MODE 0
 #endif
 
+#define RUID unsigned int
+
 enum class RENDER_API {
 	OPENGL,
 	DX12,
 	DX11,
+};
+
+struct Vertex {
+    glm::vec3 position;
+    glm::vec2 coord;
+    glm::vec3 normal;
+    glm::vec3 normal2;
 };
 
 enum class PixelFormat

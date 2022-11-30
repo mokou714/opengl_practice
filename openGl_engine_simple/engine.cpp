@@ -20,10 +20,10 @@ Engine* Engine::Instance() {
 }
 
 bool Engine::Initialize() {
-	CONSOLE_PRINTF("Initialize engine\n");
+	DEBUG_PRINTF("Initialize engine\n");
 	if (!Graphics::Instance()->Initialize())
 	{	
-		CONSOLE_PRINTF("Faild to initialize Graphics module")
+		DEBUG_PRINTF("Faild to initialize Graphics module")
 		return false;
 	}
 	//发现glfwSetKeyCallback在初始化glContext设置才有用 开始主循环后再设置就没有用了
@@ -63,21 +63,21 @@ void Engine::Stop() {
 }
 
 void Engine::DoLogic() {
-	CONSOLE_PRINTF("DoLogic\n");
+	//DEBUG_PRINTF("DoLogic\n");
 	//场景逻辑帧
 	auto currentScene = SceneManager::Instance()->getCurrentScene();
 	currentScene->logic();
 }
 
 void Engine::DoRender() {
-	CONSOLE_PRINTF("DoRender\n");
+	//DEBUG_PRINTF("DoRender\n");
 	//场景渲染帧
 	auto currentScene = SceneManager::Instance()->getCurrentScene();
 	currentScene->render();
 }
 
 void Engine::BeginFrame() {
-	CONSOLE_PRINTF("BeginFrame:%d\n", m_frame_count);
+	//DEBUG_PRINTF("BeginFrame:%d\n", m_frame_count);
 	// 先重置管线状态
 	IRenderContext* context = Graphics::Instance()->FetchRenderContext();
 	context->ResetPipelineState();
@@ -87,10 +87,15 @@ void Engine::BeginFrame() {
 }
 
 void Engine::EndFrame() {
-	CONSOLE_PRINTF("EndFrame\n");
+	//DEBUG_PRINTF("EndFrame\n");
 	Display::Present();
 	m_frame_count++;
 	if (InputManager::Instance()->getKeyState(CommonKeyCode::ESCAPE) == CommonKeyState::PRESSED)
+	{
+		Stop();
+	}
+
+	if (SceneManager::Instance()->getCurrentSceneTemplate() == TemplateScene::OfflineOutputScene)
 	{
 		Stop();
 	}

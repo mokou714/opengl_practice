@@ -3,12 +3,8 @@
 
 using namespace simple_engine;
 
-Camera::Camera(std::string name): GameObject(name), m_fov(45.0f), m_near(0.01f), m_far(5000.0f)
+Camera::Camera(std::string name): GameObject(name), m_fov(45.0f), m_near(1.f), m_far(1000.0f)
 {
-	m_position.z += 80;
-	m_position.y += 100;
-
-	m_rotation *= glm::angleAxis(glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 void Camera::Update()

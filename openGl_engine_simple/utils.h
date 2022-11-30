@@ -110,7 +110,6 @@ namespace simple_engine {
 
 		// Load a .DDS file using GLFW's own loader
 		GLuint loadDDS(const char* imagepath);
-		GLuint createGLTexture(const char*);
-		GLuint createCubemap(std::vector<const char*> files);
+		
 	}
 }

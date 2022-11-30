@@ -1,0 +1,179 @@
+#version 330 core
+
+uniform sampler2D position_rt;
+uniform sampler2D albedo_rt;
+uniform sampler2D normal_rt;
+uniform sampler2D depth_rt;
+uniform sampler2D last_frame_tex;
+
+in vec2 v_uv;
+
+layout(location=0) out vec4 color;
+
+uniform vec3 cam_pos;
+uniform mat4 view;
+uniform mat4 proj;
+
+vec2 getDirectionLightIntensity(vec3 light_dir, vec4 w_pos, vec4 w_normal)
+{
+    float k_d = 0.2;
+    float k_s = 0.7;
+    float diffuse_intensity;
+    float specular_intensity;
+    vec3 view_dir = normalize(cam_pos-w_pos.xyz);
+    
+    diffuse_intensity = k_d * max(0, dot(light_dir, w_normal.xyz));
+    specular_intensity = k_s * pow( max(dot(reflect(light_dir, w_normal.xyz), view_dir), 0), 2.0);
+    return vec2(diffuse_intensity, specular_intensity);
+}
+
+vec2 getPointLightIntensity(vec3 light_pos, vec4 w_pos, vec4 w_normal)
+{
+    float k_d = 0.2;
+    float k_s = 0.3;
+    float diffuse_intensity;
+    float specular_intensity;
+    vec3 view_dir = normalize(cam_pos-w_pos.xyz);
+    float light_distance = length(light_pos - w_pos.xyz);
+    float distance_threshold = 55.0;
+    vec3 light_dir = normalize(light_pos - w_pos.xyz);
+
+    float t_c = 0.0;        //常数衰减
+    float t_l = 0.0;        //线性衰减
+    float t_q = 0.0025;     //平方衰减
+    float tenuity;
+    if (light_distance > distance_threshold)
+    {
+        tenuity = 0.0;
+    }
+    else
+    { 
+        tenuity = 1.0 / (t_c + t_l * light_distance + t_q * light_distance * light_distance);
+    }
+    diffuse_intensity = k_d * max(0, dot(light_dir, w_normal.xyz)) * tenuity;
+    specular_intensity = k_s * pow(max(dot(reflect(light_dir, w_normal.xyz), view_dir), 0), 2.0) * tenuity;
+    return vec2(diffuse_intensity, specular_intensity);
+}
+
+vec2 getSpotLightIntensity(vec3 light_pos, vec3 aim_dir, vec4 w_pos, vec4 w_normal)
+{
+    float k_d = 0.3;
+    float k_s = 0.4;
+    float diffuse_intensity;
+    float specular_intensity;
+    vec3 view_dir = normalize(cam_pos-w_pos.xyz);
+    float light_distance = length(light_pos - w_pos.xyz);
+    float distance_threshold = 800.0f;
+    vec3 light_dir = normalize(light_pos - w_pos.xyz);
+    float angle_threshold = cos(radians(15.0f));
+
+    float t_c = 0.0;        //常数衰减
+    float t_l = 0.0;        //线性衰减
+    float t_q = 0.00001;     //平方衰减
+    float tenuity;
+    if (light_distance > distance_threshold || dot(light_dir, aim_dir) < angle_threshold)
+    {
+        tenuity = 0.0;
+    }
+    else
+    { 
+        tenuity = pow(max(0, dot(light_dir, aim_dir)), 2.0) / (t_c + t_l * light_distance+t_q * light_distance*light_distance);
+    }
+    diffuse_intensity = k_d * max(0, dot(light_dir, w_normal.xyz)) * tenuity;
+    specular_intensity = k_s * pow( max(dot(reflect(light_dir, w_normal.xyz), view_dir), 0), 2.0) * tenuity;
+    return vec2(diffuse_intensity, specular_intensity);
+}
+
+vec2 HammersleyNorm(int i, int N) {
+    // principle: reverse bit sequence of i
+	uint b =  ( uint(i) << 16u) | (uint(i) >> 16u );
+	b = (b & 0x55555555u) << 1u | (b & 0xAAAAAAAAu) >> 1u;
+	b = (b & 0x33333333u) << 2u | (b & 0xCCCCCCCCu) >> 2u;
+	b = (b & 0x0F0F0F0Fu) << 4u | (b & 0xF0F0F0F0u) >> 4u;
+	b = (b & 0x00FF00FFu) << 8u | (b & 0xFF00FF00u) >> 8u;
+
+	return vec2( i, b ) / vec2( N, 0xffffffffU );
+}
+
+mat4 rotationMatrix(vec3 axis, float angle)
+{
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0f - c;
+    
+    return mat4(
+		oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  	0.0f,
+        oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  	0.0f,
+        oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           	0.0f,
+        0.0f,                               0.0f,                              0.0f,                                	1.0f);
+}
+
+//gl_FragCoord.w is 1 / clip.w, 
+//where clip.w is the W component of the clip-space position (ie: what you wrote to gl_Position).
+
+vec3 GetSSRColor(vec4 w_position, vec4 w_normal, float depth)
+{
+    vec3 pos = w_position.xyz;
+    vec3 ray_dir = normalize(pos - cam_pos);
+    vec3 r = reflect(ray_dir, w_normal.xyz);
+    vec3 r_tangent = cross(r, w_normal.xyz);
+    int iterations = 1000;
+    float step_size = 0.05;
+    float PI = 3.14159;
+
+    for(int i=1; i<iterations+1; ++i)
+    {
+        vec3 cur_pos = pos + r * step_size * i;
+        vec4 proj_pos = (proj * view * vec4(cur_pos, 1.0));
+        vec3 cur_ndc_pos = proj_pos.xyz / proj_pos.w;
+        vec3 cur_screen_pos = (cur_ndc_pos+vec3(1.0))/2.0;
+        vec2 target_uv = cur_screen_pos.xy;
+        if(target_uv.x < 0.0 || target_uv.x > 1.0 || target_uv.y < 0.0 || target_uv.y > 1.0)
+        {
+            return vec3(0.0);
+        }
+        float cur_depth = texture(depth_rt, target_uv).r;
+        float depth_diff = cur_screen_pos.z - cur_depth;
+        float _thickness = 0.001;
+        if(depth_diff > 0 && depth_diff > _thickness){
+            return texture(last_frame_tex, cur_screen_pos.xy).rgb;
+        }
+    }
+    
+}
+
+void main() {
+    vec4 albedo = texture(albedo_rt, v_uv);
+    vec4 w_position = texture(position_rt, v_uv);
+    vec4 w_normal = texture(normal_rt, v_uv);
+    float depth = texture(depth_rt, v_uv).r;
+    float ambient_intensity = 0.7;
+
+    vec2 total_light_intensity = vec2(0.0);
+    vec3 total_light_color = vec3(1.0);
+
+    vec3 point_ligth_pos = vec3(0.0, 6, 0.0);
+    
+    if(depth > 0.999)
+    {
+        color = vec4(0.0f);
+    }
+    else
+    {
+        vec3 final_color = vec3(0.0);
+        if( albedo.w == 0)
+        {
+            vec3 lighted_color;
+            total_light_intensity += getPointLightIntensity(point_ligth_pos, w_position, w_normal);
+            lighted_color = albedo.xyz * ambient_intensity + total_light_color * (total_light_intensity.x + total_light_intensity.y);
+            final_color = lighted_color;
+        }
+        else
+        {
+            final_color = GetSSRColor(w_position, w_normal, depth) + albedo.xyz;
+        }
+
+        color = vec4(final_color, 1.0);
+    }
+    
+}

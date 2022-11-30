@@ -1,0 +1,35 @@
+#version 330 core
+
+uniform vec4 base_color;
+uniform vec3 camera_pos;
+uniform float back_face_pass;
+uniform float no_color;
+
+in vec2 v_uv;
+in vec3 v_normal;
+in vec3 v_normal2;
+in vec3 v_pos;
+out vec4 color;
+
+void main() {
+    vec3 normal = normalize(v_normal);
+    vec3 view_dir = normalize(camera_pos - v_pos);
+    vec4 final_color = base_color;
+
+    vec3 outline_color = vec3(1.0f, 1.0f, 1.0f);
+
+    if(back_face_pass == 1.0f)
+    {
+        final_color.xyz = outline_color;
+    }
+
+    if(no_color == 0.0)
+    {
+        //final_color.xyz = v_normal;
+        color = final_color;
+    }
+    else
+    {
+        color = base_color;
+    }
+}

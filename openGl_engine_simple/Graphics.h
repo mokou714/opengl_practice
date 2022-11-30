@@ -14,6 +14,7 @@ namespace simple_engine
 		bool Initialize();
 		IRenderContext* FetchRenderContext();
 		IRenderDevice* FetchRenderDevice();
+		static RENDER_API GetRenderAPI() { return Graphics::s_render_api; }
 
 		std::vector<VertexBuffer> m_vertex_buffers;
 		std::vector<ElementBuffer> m_element_buffers;

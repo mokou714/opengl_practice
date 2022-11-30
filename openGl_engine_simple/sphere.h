@@ -15,4 +15,3 @@ namespace simple_engine {
 	};
 }
 
-

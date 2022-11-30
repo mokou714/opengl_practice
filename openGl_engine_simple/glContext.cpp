@@ -1,5 +1,5 @@
-#include "glContext.h"
 #include <stdio.h>
+#include "glContext.h"
 #include "glDevice.h"
 
 using namespace simple_engine;
@@ -11,6 +11,7 @@ GLContext::GLContext():
 	m_vertexBuffer(0),
 	m_uvBuffer(0),
 	m_normalBuffer(0),
+	m_normalBuffer2(0),
 	m_colorBuffer(0),
 	m_elementBuffer(0)
 {	
@@ -41,6 +42,7 @@ bool GLContext::Initialize() {
 	glGenBuffers(1, &m_colorBuffer);
 	glGenBuffers(1, &m_uvBuffer);
 	glGenBuffers(1, &m_normalBuffer);
+	glGenBuffers(1, &m_normalBuffer2);
 	glGenBuffers(1, &m_elementBuffer);
 
 	is_initialized = true;
@@ -51,11 +53,16 @@ void GLContext::ResetPipelineState() {
 	IRenderContext::ResetPipelineState();
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, SE_WINDOW_WIDTH, SE_WINDOW_HEIGHT);
+	glClearColor(0.0, 0.0, 0.3, 0.0);
 	glEnable(GL_CULL_FACE);
+	glDepthMask(true);
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glDisable(GL_BLEND);
 	glCullFace(GL_BACK); 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_STENCIL_TEST);
 	glDepthFunc(GL_LESS);
+	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
@@ -71,6 +78,9 @@ void GLContext::SetPipelineState(const PipelineStateObject& state)
 	{
 		glDisable(GL_DEPTH_TEST);
 	}
+
+	glDepthMask(state.depth_write_enable);
+	
 	if (state.stencil_test_enable)
 	{
 		glEnable(GL_STENCIL_TEST);
@@ -90,23 +100,37 @@ void GLContext::SetPipelineState(const PipelineStateObject& state)
 	else {
 		glDisable(GL_CULL_FACE);
 	}
+
+	if (state.blend_enable)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	else
+	{
+		glDisable(GL_BLEND);
+	}
+	glColorMask(state.color_mask_r, state.color_mask_g, state.color_mask_b, state.color_mask_a);
 }
 
 
 void GLContext::SetMaterial(Material& mat)
 {	
 	IRenderContext::SetMaterial(mat);
+
+	SetPipelineState(mat.getPipelineState());
+
 	//创建并绑定shader program
 	GLuint program_id = mat.getShaderProgram();
 	if (!m_programs_info_map.count(program_id)) {
-		CONSOLE_PRINTF("Create Shader Program\n")
+		DEBUG_PRINTF("Create Shader Program\n")
 		program_id = createShaderProgram(mat.getVSFile().c_str(), mat.getPSFile().c_str());
 		assert(program_id != 0);
 		m_programs_info_map[program_id] = std::unordered_map<std::string, GLuint>();
 		mat.setShaderProgram(program_id);
 	}
 
-	CONSOLE_PRINTF("Set Shader Program\n")
+	//DEBUG_PRINTF("Set Shader Program\n")
 	glUseProgram(program_id);
 
 	auto& program_info_map = m_programs_info_map[program_id];
@@ -160,6 +184,7 @@ void GLContext::SetMaterial(Material& mat)
 		}
 		glUniform2f(program_info_map[name], pair.second.x, pair.second.y);
 	}
+
 	for (auto& pair : mat.getUniforms1f()) {
 		std::string name = pair.first;
 		if (!program_info_map.count(name)) {
@@ -167,6 +192,7 @@ void GLContext::SetMaterial(Material& mat)
 		}
 		glUniform1f(program_info_map[name], pair.second);
 	}
+
 	for (auto& pair : mat.getUniforms1fv()) {
 		std::string name = pair.first;
 		if (!program_info_map.count(name)) {
@@ -175,82 +201,54 @@ void GLContext::SetMaterial(Material& mat)
 		glUniform1fv(program_info_map[name], pair.second.size(), &pair.second[0]);
 	}
 
-	//创建并绑定纹理
-	if (mat.getTextureResources().size() > 0 || mat.getCubemapTextureResources().size() > 0) {
-		//材质有纹理但未创建gl纹理 (不考虑部分已创建的情况)
-		if (mat.getGLTextures().size() == 0) {
-			for(auto& pair: mat.getTextureResources()){
-				auto uniform_name = pair.first;
-				auto texture_file = pair.second;
-				GLuint tex_id = Utils::createGLTexture(texture_file);
-				CONSOLE_PRINTF("Create Texture:%d\n", tex_id);
-				if (tex_id) {
-					m_textures.push_back(tex_id);
-					program_info_map[uniform_name] = glGetUniformLocation(program_id, uniform_name.c_str());
-					mat.addGLTexture(uniform_name, tex_id);
-				}
-				else {
-					CONSOLE_PRINTF("GLContext failed to create texture: %s\n", texture_file);
-				}
-			}
-
-			for (auto& pair : mat.getCubemapTextureResources()) {
-				auto uniform_name = pair.first;
-				GLuint cubemap_id = Utils::createCubemap(pair.second);
-				CONSOLE_PRINTF("Create Cube Texture: %d\n", cubemap_id);
-				if (cubemap_id)
-				{
-					m_cubemapTextures.push_back(cubemap_id);
-					program_info_map[uniform_name] = glGetUniformLocation(program_id, uniform_name.c_str());
-					mat.addGLTexture(uniform_name, cubemap_id);
-				}
-				else {
-					CONSOLE_PRINTF("GLContext failed to create cubemap: %s\n", pair.second[0]);
-				}
-				
-			}
+	// 绑定gl纹理和采样器到管线
+	unsigned short texture_index = 0;
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	for (auto& pair : mat.getTextures()) {
+		auto uniform_name = pair.first;
+		glActiveTexture(GL_TEXTURE0 + texture_index);
+		glBindTexture(GL_TEXTURE_2D, pair.second->GetResourceId());
+		if (!program_info_map.count(uniform_name))
+		{
+			program_info_map[uniform_name] = glGetUniformLocation(program_id, uniform_name.c_str());
 		}
-		
-		// 绑定纹理和采样器到管线
-		unsigned short texture_index = 0;
-		assert(mat.getGLTextures().size() <= 32);
-		for (auto& pair : mat.getGLTextures()) {
-			auto uniform_name = pair.first;
-			auto gl_texture = pair.second;
-			glActiveTexture(GL_TEXTURE0 + texture_index);
-
-			if (std::find(m_textures.cbegin(), m_textures.cend(), gl_texture) != m_textures.cend())
-			{
-				CONSOLE_PRINTF("Bind Texture: %d\n", gl_texture);
-				glBindTexture(GL_TEXTURE_2D, gl_texture);
-			}
-			else if (std::find(m_cubemapTextures.cbegin(), m_cubemapTextures.cend(), gl_texture) != m_cubemapTextures.cend())
-			{
-				CONSOLE_PRINTF("Bind Cube Texture: %d\n", gl_texture);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, gl_texture);
-			}
-			else {
-				CONSOLE_PRINTF("glBindTexture type error !\n")
-				continue;
-			}
-
-			glUniform1i(program_info_map[uniform_name], texture_index);
-			texture_index++;
-		}
+		glUniform1i(program_info_map[uniform_name], texture_index);
+		texture_index++;
 	}
-
+	for (auto& pair : mat.getCubemapTextures()) {
+		auto uniform_name = pair.first;
+		glActiveTexture(GL_TEXTURE0 + texture_index);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, pair.second->GetResourceId());
+		if (!program_info_map.count(uniform_name))
+		{
+			program_info_map[uniform_name] = glGetUniformLocation(program_id, uniform_name.c_str());
+		}
+		glUniform1i(program_info_map[uniform_name], texture_index);
+		texture_index++;
+	}
+	for (auto& pair : mat.getOtherTextures())
+	{
+		auto uniform_name = pair.first;
+		glActiveTexture(GL_TEXTURE0 + texture_index);
+		glBindTexture(GL_TEXTURE_2D, pair.second);
+		if (!program_info_map.count(uniform_name))
+		{
+			program_info_map[uniform_name] = glGetUniformLocation(program_id, uniform_name.c_str());
+		}
+		glUniform1i(program_info_map[uniform_name], texture_index);
+		texture_index++;
+	}
 }
 
-void GLContext::DrawCommand(
-	const std::vector<glm::vec3>& vertices,
-	const std::vector<glm::vec2>& coords,
-	const std::vector<glm::vec3>& normals,
-	const std::vector<unsigned short>& indices	
-)
-{
-	assert(vertices.size() > 0);
-	assert(indices.size() > 0);
-
+void GLContext::DrawCommand(Mesh& mesh)
+{	
+	auto vertices = mesh.getVertices();
+	auto coords = mesh.getCoords();
+	auto normals = mesh.getNormals();
+	auto normals_2 = mesh.getVertexColor();
+	auto indices = mesh.getIndices();
 	//顶点posistion数据
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
@@ -280,7 +278,7 @@ void GLContext::DrawCommand(
 			(void*)0            // array buffer offset
 		);
 	}
-	
+
 	if (normals.size() > 0)
 	{
 		glEnableVertexAttribArray(2);
@@ -289,6 +287,22 @@ void GLContext::DrawCommand(
 
 		glVertexAttribPointer(
 			2,					// The attribute we want to configure
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+	}
+
+	if (normals_2.size() > 0)
+	{
+		glEnableVertexAttribArray(3);
+		glBindBuffer(GL_ARRAY_BUFFER, m_normalBuffer2);
+		glBufferData(GL_ARRAY_BUFFER, normals_2.size() * sizeof(glm::vec3), &normals_2[0], GL_STATIC_DRAW);
+
+		glVertexAttribPointer(
+			3,					// The attribute we want to configure
 			3,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?
@@ -316,6 +330,7 @@ void GLContext::DrawIndexed(unsigned int ElementCount, unsigned int StartVertexO
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
 }
 
 void GLContext::Present() {
@@ -340,6 +355,7 @@ void GLContext::Destroy() {
 	glDeleteBuffers(1, &m_vertexBuffer);
 	glDeleteBuffers(1, &m_uvBuffer);
 	glDeleteBuffers(1, &m_normalBuffer);
+	glDeleteBuffers(1, &m_normalBuffer2);
 	glDeleteBuffers(1, &m_colorBuffer);
 	glDeleteBuffers(1, &m_elementBuffer);
 	
@@ -452,7 +468,7 @@ GLuint GLContext::createShaderProgram(const char* vs_path, const char* ps_path) 
 		VertexShaderStream.close();
 	}
 	else {
-		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vs_path);
+		DEBUG_PRINTF("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vs_path);
 		getchar();
 		return 0;
 	}
@@ -482,7 +498,7 @@ GLuint GLContext::createShaderProgram(const char* vs_path, const char* ps_path) 
 	if (InfoLogLength > 0) {
 		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-		printf("%s\n", &VertexShaderErrorMessage[0]);
+		DEBUG_PRINTF("%s\n", &VertexShaderErrorMessage[0]);
 	}
 
 
@@ -498,7 +514,7 @@ GLuint GLContext::createShaderProgram(const char* vs_path, const char* ps_path) 
 	if (InfoLogLength > 0) {
 		std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-		printf("%s\n", &FragmentShaderErrorMessage[0]);
+		DEBUG_PRINTF("%s\n", &FragmentShaderErrorMessage[0]);
 	}
 
 
@@ -515,7 +531,7 @@ GLuint GLContext::createShaderProgram(const char* vs_path, const char* ps_path) 
 	if (InfoLogLength > 0) {
 		std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
 		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-		printf("%s\n", &ProgramErrorMessage[0]);
+		DEBUG_PRINTF("%s\n", &ProgramErrorMessage[0]);
 	}
 
 
@@ -560,3 +576,51 @@ CommonKeyState GLContext::getKeyState(CommonKeyCode key) {
 	uint gl_key_state = glfwGetKey(GLDevice::GetGLWindow(), gl_key_code);
 	return glKeyStateMap[gl_key_state];
 }
+
+void GLContext::SetFrameBufferObject(GLFrameBufferObject& fbo)
+{
+	glViewport(0, 0, fbo.GetWidth(), fbo.GetHeight());
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo.GetFrameBufferObject());
+}
+
+void GLContext::ResetFrameBufferObject()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GLContext::ClearFrameBufferObject(GLFrameBufferObject& fbo)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo.GetFrameBufferObject());
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GLContext::BlitFrameBuffer(GLFrameBufferObject* fbo1, GLFrameBufferObject* fbo2)
+{
+	assert(fbo1 != nullptr);
+	UINT width = SE_WINDOW_WIDTH;
+	UINT height = SE_WINDOW_HEIGHT;
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo1->GetFrameBufferObject());
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+	if (fbo2 != nullptr)
+	{
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo2->GetFrameBufferObject());
+		glDrawBuffer(GL_BACK);
+		width = fbo2->GetWidth();
+		height = fbo2->GetHeight();
+	}
+	else {
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glDrawBuffer(GL_BACK);
+	}
+	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
+		GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
+		GL_NEAREST);
+		
+	//不清楚为什么这里显示正确还有error 可能是之前的command的？
+	//DEBUG_PRINTF("GL error after blit frame: %d\n", glGetError());
+
+}
+

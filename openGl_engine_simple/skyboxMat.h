@@ -8,6 +8,7 @@ namespace simple_engine {
 		ECOSYSTEM,
 		HEAVEN,
 		POLLUTED_EARTH,
+		HDR_1
 	};
 
 	class SkyboxMat : public Material

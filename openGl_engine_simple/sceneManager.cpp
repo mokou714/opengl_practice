@@ -2,6 +2,10 @@
 #include "firstScene.h"
 #include "magicDoorScene.h"
 #include "textureWithDepthScene.h"
+#include "deferredRenderingScene.h"
+#include "offlineOutputScene.h"
+#include "stylizedRenderingScene.h"
+#include "rayMarching.h"
 
 using namespace simple_engine;
 
@@ -42,6 +46,18 @@ Scene* SceneManager::createAndAddScene(std::string name, Camera* camera, Templat
 	case TemplateScene::GraphicHW3:
 		newScene = new TextureWithDepthScene(name, camera);
 		break;
+	case TemplateScene::GraphicHW4:
+		newScene = new DeferredRenderingScene(name, camera);
+		break;
+	case TemplateScene::OfflineOutputScene:
+		newScene = new OfflineOutputScene(name, camera);
+		break;
+	case TemplateScene::Stylized:
+		newScene = new StylizedRenderingScene(name, camera);
+		break;
+	case TemplateScene::RayMarching:
+		newScene = new RayMarching(name, camera);
+		break;
 	default:
 		newScene = new Scene(name, camera);
 		break;
@@ -50,7 +66,7 @@ Scene* SceneManager::createAndAddScene(std::string name, Camera* camera, Templat
 	if (newScene)
 	{
 		if (addScene(newScene))
-		{
+		{	
 			return newScene;
 		}
 		else {
@@ -75,9 +91,10 @@ bool SceneManager::removeScene(std::string name) {
 	}
 	return false;
 }
-void SceneManager::setCurrentScene(Scene* scene) {
+void SceneManager::setCurrentScene(Scene* scene, TemplateScene scene_template) {
 	if (scene == nullptr || scene != this->currentScene) {
 		currentScene = scene;
+		currentSceneTemplate = scene_template;
 	}
 }
 

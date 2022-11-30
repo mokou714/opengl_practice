@@ -5,11 +5,11 @@
 #include <sstream>
 #include <unordered_map>
 #include "deviceCommon.h"
-#include "utils.h"
 #include "glHelper.h"
 #include "IRenderContext.h"
 #include "glCommon.h"
 #include "GpuBuffer.h"
+#include "glFrameBufferObject.h"
 
 /*
  	engine在主循环里调用glContext的函数，执行gl指令
@@ -57,8 +57,7 @@ namespace simple_engine {
 		bool Initialize() override;
 
 		/*直接改变管线状态的操作*/
-		void DrawCommand(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec2>& coords,
-			const std::vector<glm::vec3>& normals, const std::vector<unsigned short>& indices) override;
+		void DrawCommand(Mesh& mesh) override;
 
 		void SetMaterial(Material& mat) override;
 		void DrawIndexed(unsigned int ElementCount, unsigned int StartVertexOffset) override;
@@ -67,6 +66,10 @@ namespace simple_engine {
 		void SetPipelineState(const PipelineStateObject&) override;
 		void SetVertexBuffer(const VertexBuffer& buf) override;
 		void SetElementBuffer(const ElementBuffer& buf) override;
+		void SetFrameBufferObject(GLFrameBufferObject& fbo) override;
+		void ClearFrameBufferObject(GLFrameBufferObject& fbo) override;
+		void ResetFrameBufferObject() override;
+		void BlitFrameBuffer(GLFrameBufferObject* fbo1, GLFrameBufferObject* fbo2) override;
 
 		/*从文件创建资源*/
 		GLuint loadTextureFromDDS(const char* file_path);
@@ -88,6 +91,7 @@ namespace simple_engine {
 		GLuint m_vertexBuffer;
 		GLuint m_uvBuffer;
 		GLuint m_normalBuffer;
+		GLuint m_normalBuffer2;
 		GLuint m_colorBuffer;
 		GLuint m_elementBuffer;
 		//program_id -> <uniform name, uniform location>

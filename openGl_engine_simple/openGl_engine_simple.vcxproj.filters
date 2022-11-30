@@ -43,6 +43,9 @@
     <Filter Include="object">
       <UniqueIdentifier>{43a72e3d-71c3-4344-969d-b69243ccbdc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="techniques">
+      <UniqueIdentifier>{cf82d431-0f9a-4c4e-b935-a5c6d5d81a06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine.cpp">
@@ -185,6 +188,61 @@
       <Filter>material</Filter>
     </ClCompile>
     <ClCompile Include="displacementTexMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="WinApp.cpp" />
+    <ClCompile Include="deferredRenderingScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="glFrameBufferObject.cpp">
+      <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="gBufferMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="quad.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="deferredQuadObj.cpp">
+      <Filter>gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="deferredRenderingMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="pyramid.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="OIT.cpp">
+      <Filter>techniques</Filter>
+    </ClCompile>
+    <ClCompile Include="offlineOutputScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="prefilterEnviromentMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="shadowScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="stylizedRenderingScene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="stylizedMat.cpp">
+      <Filter>material</Filter>
+    </ClCompile>
+    <ClCompile Include="SilhouetteOutline.cpp">
+      <Filter>techniques</Filter>
+    </ClCompile>
+    <ClCompile Include="cornellBox.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="rayMarching.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CornellBoxObj.cpp">
+      <Filter>gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SSR_GBuffer.cpp">
       <Filter>material</Filter>
     </ClCompile>
   </ItemGroup>
@@ -337,6 +395,61 @@
       <Filter>material</Filter>
     </ClInclude>
     <ClInclude Include="displacementTexMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="WinApp.h" />
+    <ClInclude Include="deferredRenderingScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="glFrameBufferObject.h">
+      <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gBufferMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="quad.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="deferredQuadObj.h">
+      <Filter>gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="deferredRenderingMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="pyramid.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="OIT.h">
+      <Filter>techniques</Filter>
+    </ClInclude>
+    <ClInclude Include="offlineOutputScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="prefilterEnviromentMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="shadowScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="stylizedRenderingScene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="stylizedMat.h">
+      <Filter>material</Filter>
+    </ClInclude>
+    <ClInclude Include="SilhouetteOutline.h">
+      <Filter>techniques</Filter>
+    </ClInclude>
+    <ClInclude Include="cornellBox.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="rayMarching.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CornellBoxObj.h">
+      <Filter>gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="SSR_GBuffer.h">
       <Filter>material</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,6 +24,14 @@ Plane::Plane(): Mesh() {
 		glm::vec2{1.0, 0.0},
 		glm::vec2{1.0, 1.0},
 	};
+
+
+	m_normals = {
+		{0.0, 1.0, 0.0 },
+		{0.0, 1.0, 0.0 },
+		{0.0, 1.0, 0.0 },
+		{0.0, 1.0, 0.0 },
+	};
 }
 
 float Plane::getSideSize()

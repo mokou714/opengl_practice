@@ -51,6 +51,12 @@ namespace simple_engine
 		{GLFW_RELEASE,	CommonKeyState::RELEASED},
 		{GLFW_REPEAT,	CommonKeyState::REPEATED},
 	};
+
+	static std::unordered_map<PixelFormat, GLenum> glPixelFormatMap = {
+		{PixelFormat::PIXEL_FORMAT_R32G32B32_FLOAT, GL_RGBA32F},
+	};
+
+
 }
 
 

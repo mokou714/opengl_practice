@@ -2,8 +2,9 @@
 #include "deviceCommon.h"
 #include "GpuBuffer.h"
 #include "PipelineStateObject.h"
-
+#include "glFrameBufferObject.h"
 #include "material.h" //todo
+#include "mesh.h"
 
 /* handle command list and apply pipeline state changes */
 
@@ -23,12 +24,15 @@ namespace simple_engine
 		virtual void SetPipelineState(const PipelineStateObject& pso);
 		virtual void SetVertexBuffer(const VertexBuffer& buf);
 		virtual void SetElementBuffer(const ElementBuffer& buf);
+		virtual void SetFrameBufferObject(GLFrameBufferObject& fbo) = 0;	//todo
+		virtual void ResetFrameBufferObject() = 0;
+		virtual void ClearFrameBufferObject(GLFrameBufferObject& fbo) = 0;	//todo
+		virtual void BlitFrameBuffer(GLFrameBufferObject* fbo1, GLFrameBufferObject* fbo2) = 0;
 
 		virtual void Present()=0; //todo
 		virtual void ResetPipelineState() = 0; //todo
 		virtual void SetMaterial(Material& mat) = 0; //todo
-		virtual void DrawCommand(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec2>& coords,
-			const std::vector<glm::vec3>& normals, const std::vector<unsigned short>& indices) = 0; //todo
+		virtual void DrawCommand(Mesh& mesh) = 0; //todo
 
 		virtual void setCursorPos(double xpos, double ypos) = 0;
 		virtual void getCursorPos(double& xpos, double& ypos) = 0;

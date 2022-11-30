@@ -24,6 +24,11 @@ namespace simple_engine
 		OP_STENCIL_INVERT,
 	};
 
+	enum class BlendOption
+	{
+
+	};
+
 	enum class RaterizerOption
 	{
 		FILL_MODE_SOLID,
@@ -46,8 +51,14 @@ namespace simple_engine
 		static PipelineStateObject CreatePSO(PSOType type);
 		void ConsolePrint();
 		bool depth_test_enable = true;
+		bool depth_write_enable = true;
 		bool culling_enable = true;
 		bool stencil_test_enable = false;
+		bool blend_enable = false;
+		bool color_mask_r = true;
+		bool color_mask_g = true;
+		bool color_mask_b = true;
+		bool color_mask_a = true;
 		unsigned int stencil_ref = 1;
 		unsigned int stencil_mask = 0xFF;
 		DepthStencilOption depth_func = DepthStencilOption::FUNC_LESS;

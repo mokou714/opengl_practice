@@ -4,12 +4,22 @@
 
 using namespace simple_engine;
 
+GameObject::GameObject(): m_scale(1.0f)
+{
+
+}
+
 GameObject::GameObject(std::string name)
 	:
 	m_position({ 0,0,0 }),
 	m_scale(1.0),
 	m_name(name)
 {
+}
+
+GameObject::~GameObject()
+{
+	m_material.releaseAllTextures();
 }
 
 void GameObject::addMesh(Mesh mesh) {
@@ -102,8 +112,7 @@ void GameObject::Draw() {
 	{	
 		IRenderContext* context = Graphics::Instance()->FetchRenderContext();
 		context->SetMaterial(m_material);
-		context->SetPipelineState(m_pipeline_state);
-		context->DrawCommand(mesh.getVertices(), mesh.getCoords(), mesh.getNormals(),  mesh.getIndices());
+		context->DrawCommand(mesh);
 		context->DrawIndexed(mesh.getIndices().size(), 0);
 	}
 }
@@ -169,12 +178,16 @@ void GameObject::setRotationX(float radian)
 	m_rotation = glm::quat(euler_angles);
 }
 
-void GameObject::setRotationY(float angle)
+void GameObject::setRotationY(float radian)
 {
-
+	glm::vec3 euler_angles = glm::eulerAngles(m_rotation);
+	euler_angles.y = radian;
+	m_rotation = glm::quat(euler_angles);
 }
 
-void GameObject::setRotationZ(float angle)
+void GameObject::setRotationZ(float radian)
 {
-
+	glm::vec3 euler_angles = glm::eulerAngles(m_rotation);
+	euler_angles.z = radian;
+	m_rotation = glm::quat(euler_angles);
 }

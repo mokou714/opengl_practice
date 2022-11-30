@@ -35,11 +35,11 @@ bool FirstScene::init() {
 	cube->getMaterial().setUniform3f("base_color", glm::vec3(0.8, 0.8, 0.0));
 	addGameObjects(cube);
 
-	GameObject* suzanne = new SuzanneObj("suzanne");
-	suzanne->setScale(20.0f);
-	suzanne->setPositionZ(50.0f);
-	suzanne->setPositionY(30.0f);
-	addGameObjects(suzanne);
+	//GameObject* suzanne = new SuzanneObj("suzanne");
+	//suzanne->setScale(20.0f);
+	//suzanne->setPositionZ(50.0f);
+	//suzanne->setPositionY(30.0f);
+	//addGameObjects(suzanne);
 
 	GameObject* envSphere = new SphereObj("enviromentSphere");
 	envSphere->setScale(5.0f);
@@ -47,7 +47,7 @@ bool FirstScene::init() {
 	envSphere->setMaterial(EnviromentMappingMat());
 	addGameObjects(envSphere);
 
-	m_skyboxs.push_back(new Skybox("skybox", SKYBOX_TYPE::ECOSYSTEM));
+	m_skyboxs.push_back(new Skybox("skybox", SKYBOX_TYPE::HDR_1));
 
 	BaseLight* dir_light = new DirectLight("direct light");
 	dir_light->setBeingControlled(true);
